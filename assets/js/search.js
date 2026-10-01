@@ -1,6 +1,6 @@
 lucide.createIcons();
 
-const API_URL = 'http://localhost:3000';
+const API_URL = '';
 let allPosts = [];
 let selectedStatus = 'ALL';
 let userLikes = [];

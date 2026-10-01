@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000';
+const API_URL = '';
 
 // Cek user login
 const currentUser = JSON.parse(localStorage.getItem('user'));

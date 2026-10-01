@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000';
+const API_URL = '';
 
 // Get user from localStorage
 let currentUser = JSON.parse(localStorage.getItem('user'));

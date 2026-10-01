@@ -114,7 +114,7 @@
     // Fetch unread notification count untuk user
     if (user && user.id) {
         const fetchNotifCount = () => {
-            fetch(`http://localhost:3000/api/notifications/unread-count?user_id=${user.id}`)
+            fetch(`/api/notifications/unread-count?user_id=${user.id}`)
                 .then(res => res.json())
                 .then(data => {
                     const badge = document.getElementById('notif-badge');

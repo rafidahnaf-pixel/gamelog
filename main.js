@@ -2,7 +2,7 @@
 // GAME LOG - FRONTEND SCRIPT (main.js)
 // ==========================================
 
-const API_URL = 'http://localhost:3000';
+const API_URL = '';
 let activePostId = null;
 
 // 1. Check Status Login User

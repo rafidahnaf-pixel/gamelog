@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000';
+const API_URL = '';
 
 // Storage sementara data dari server untuk pencarian instan
 let allGames = [];
