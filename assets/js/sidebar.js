@@ -95,7 +95,7 @@
     if (user && user.id) {
         if (profileLink) {
             const iconHtml = user.avatar 
-                ? `<img src="http://localhost:3000${user.avatar}" alt="${user.username}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;">`
+                ? `<img src="${user.avatar}" alt="${user.username}" style="width:28px;height:28px;border-radius:50%;object-fit:cover;">`
                 : `<i data-lucide="user"></i>`;
             profileLink.innerHTML = `${iconHtml} <span>Profile</span>`;
         }

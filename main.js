@@ -72,7 +72,7 @@ function formatImageUrl(imagePath) {
         return imagePath;
     }
     const cleanPath = imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
-    return `${API_URL}${cleanPath}`;
+    return cleanPath;
 }
 
 function showToast(message) {
