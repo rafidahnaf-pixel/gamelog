@@ -64,6 +64,11 @@
                         <input type="password" id="confirm-password" name="confirm_password" placeholder="Ulangi password" required>
                     </div>
 
+                    <div class="form-group">
+                        <label for="secret-code">Secret Code (untuk Admin)</label>
+                        <input type="text" id="secret-code" name="secret_code" placeholder="Khusus admin, kosongkan jika user biasa">
+                    </div>
+
                     <div class="terms">
                         <input type="checkbox" id="terms" required>
                         <label for="terms">Saya menyetujui Terms & Conditions.</label>
@@ -135,7 +140,8 @@
             }
 
             try {
-                const payload = { username, email, password };
+                const secretCode = document.getElementById('secret-code').value.trim();
+                const payload = { username, email, password, secret_code: secretCode };
                 console.log('Mengirim payload register:', payload);
 
                 const response = await fetch('/api/register', {
