@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameLog - Admin Dashboard</title>
+    <link rel="stylesheet" href="../base.css">
+    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400,500,600,700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <aside class="sidebar" id="sidebar"></aside>
+
+    <main class="main-content">
+        <div class="admin-wrapper">
+            
+            <div class="admin-header">
+                <h2><i data-lucide="shield-check"></i> Admin Dashboard</h2>
+                <p>Kelola daftar game, pantau statistik, dan moderasi postingan komunitas.</p>
+            </div>
+
+            <!-- STATS CARDS -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: rgba(99, 102, 241, 0.15); color: #818cf8;">
+                        <i data-lucide="users"></i>
+                    </div>
+                    <div>
+                        <h3 id="stat-users">0</h3>
+                        <p>Total User</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: rgba(16, 185, 129, 0.15); color: #34d399;">
+                        <i data-lucide="gamepad-2"></i>
+                    </div>
+                    <div>
+                        <h3 id="stat-games">0</h3>
+                        <p>Game Terdaftar</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24;">
+                        <i data-lucide="message-square"></i>
+                    </div>
+                    <div>
+                        <h3 id="stat-posts">0</h3>
+                        <p>Total Postingan</p>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <!-- QUICK LINKS -->
+            <section class="admin-section">
+                <div class="section-title">
+                    <h3><i data-lucide="layout-dashboard"></i> Navigasi Cepat</h3>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                    <a href="admin-games.html" class="admin-quick-link">
+                        <i data-lucide="gamepad-2"></i>
+                        <span>Manajemen Game</span>
+                    </a>
+                    <a href="admin-users.html" class="admin-quick-link">
+                        <i data-lucide="users"></i>
+                        <span>Manajemen User</span>
+                    </a>
+                    <a href="admin-posts.html" class="admin-quick-link">
+                        <i data-lucide="file-text"></i>
+                        <span>Moderasi Postingan</span>
+                    </a>
+                    <a href="admin-feedbacks.html" class="admin-quick-link">
+                        <i data-lucide="mail"></i>
+                        <span>Feedback</span>
+                    </a>
+                    <a href="admin-reports.html" class="admin-quick-link">
+                        <i data-lucide="flag"></i>
+                        <span>Reports</span>
+                    </a>
+                    <a href="../home.html" class="admin-quick-link">
+                        <i data-lucide="home"></i>
+                        <span>Lihat Situs</span>
+                    </a>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script src="../assets/js/admin.js"></script>
+    <script src="../assets/js/sidebar.js"></script>
+</body>
+</html>

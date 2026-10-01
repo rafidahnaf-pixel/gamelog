@@ -1,0 +1,247 @@
+:root {
+    --bg-main: #000000;
+    --bg-card: #1a2e3a;
+    --bg-sidebar: #000000;
+    --border-color: #233D4D;
+    --border-card: #2a4a5a;
+    --primary: #FE7F2D;
+    --primary-hover: #e56f1f;
+    --text-primary: #ffffff;
+    --text-secondary: #b8c8d8;
+    --text-muted: #7a8a9a;
+    --radius-sm: 8px;
+    --radius-md: 10px;
+    --radius-lg: 15px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+
+/* SIDEBAR GLOBAL */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 230px;
+    height: 100vh;
+    background-color: var(--bg-sidebar);
+    padding: 25px 15px;
+    border-right: 2px solid #233D4D;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.sidebar h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 22px;
+    margin-bottom: 35px;
+    padding-left: 10px;
+}
+
+.sidebar h2 [data-lucide] {
+    width: 24px;
+    height: 24px;
+    color: var(--primary);
+}
+
+.sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 12px 14px;
+    margin-bottom: 7px;
+    border-radius: var(--radius-md);
+    transition: 0.2s ease;
+}
+
+.sidebar a [data-lucide] {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.sidebar a:hover {
+    background-color: var(--border-color);
+    color: var(--text-primary);
+    transform: translateX(3px);
+}
+
+.sidebar a.active {
+    background-color: var(--primary);
+    color: var(--text-primary);
+    box-shadow: 0 4px 12px rgba(254, 127, 45, 0.3);
+}
+
+#sidebar-profile-icon:hover {
+    background-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+/* USER SIDEBAR ACTIVE STATE - sama seperti admin */
+body:not(.admin-mode) .sidebar a.active,
+body:not(.admin-mode) .sidebar a.active:hover {
+    background-color: rgba(254, 127, 45, 0.2) !important;
+    color: #FE7F2D !important;
+    font-weight: 600;
+    border-left: 3px solid var(--primary);
+    padding-left: 11px;
+    box-shadow: none;
+}
+
+/* BUTTON SHADOW EFFECT - samakan dengan admin */
+.primary-btn {
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.primary-btn:hover {
+    box-shadow: 0 6px 18px rgba(99, 102, 241, 0.5);
+}
+
+.secondary-btn {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.secondary-btn:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* MAIN CONTENT CONTAINER */
+.main-content {
+    margin-left: 230px;
+    min-height: 100vh;
+    padding: 0 45px 50px;
+}
+
+/* TOPBAR GLOBAL */
+.topbar {
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* BUTTON STYLES GLOBAL */
+.primary-btn, .secondary-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: 0.2s ease;
+}
+
+.primary-btn {
+    background-color: var(--primary);
+    color: var(--text-primary);
+    border-color: var(--primary);
+}
+
+.primary-btn:hover {
+    background-color: var(--primary-hover);
+}
+
+.secondary-btn {
+    color: var(--text-primary);
+    border-color: #334155;
+    background-color: transparent;
+}
+
+.secondary-btn:hover {
+    background-color: var(--border-color);
+}
+
+/* FOOTER GLOBAL */
+footer {
+    margin-left: 230px;
+    text-align: center;
+    color: var(--text-muted);
+    padding: 35px;
+    font-size: 12px;
+}
+
+/* ADMIN SIDEBAR STYLING */
+body.admin-mode .sidebar {
+    border-right: 2px solid #233D4D;
+}
+
+body.admin-mode .sidebar a:hover {
+    background-color: rgba(254, 127, 45, 0.1);
+    color: #FE7F2D;
+}
+
+body.admin-mode .sidebar a.active,
+body.admin-mode .sidebar a.active:hover {
+    background-color: rgba(254, 127, 45, 0.2) !important;
+    color: #FE7F2D !important;
+    font-weight: 600;
+    border-left: 3px solid var(--primary);
+    padding-left: 11px;
+    box-shadow: none !important;
+}
+
+/* ADMIN MODE - Hapus semua shadow */
+body.admin-mode .primary-btn,
+body.admin-mode .secondary-btn,
+body.admin-mode .stat-card,
+body.admin-mode .admin-section,
+body.admin-mode .admin-quick-link,
+body.admin-mode .btn-delete {
+    box-shadow: none !important;
+}
+
+/* ADMIN QUICK LINKS (Dashboard) */
+.admin-quick-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    transition: 0.2s ease;
+}
+
+.admin-quick-link:hover {
+    border-color: var(--primary);
+    background: rgba(99, 102, 241, 0.08);
+    transform: translateY(-2px);
+}
+
+.admin-quick-link [data-lucide] {
+    width: 22px;
+    height: 22px;
+    color: var(--primary);
+}
+
+/* RESPONSIVE LAYOUT GLOBAL */
+@media (max-width: 700px) {
+    .sidebar { width: 70px; padding: 20px 10px; }
+    .sidebar h2 span, .sidebar a span { display: none; }
+    .sidebar h2, .sidebar a { justify-content: center; }
+    .main-content, footer { margin-left: 70px; padding: 0 20px 40px; }
+}

@@ -1,0 +1,148 @@
+/* ==========================================
+   GAMELOG - SEARCH PAGE STYLES
+   ========================================== */
+
+.search-container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 10px 0 40px;
+}
+
+.search-header {
+    margin-bottom: 24px;
+}
+
+.search-header h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary, #ffffff);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
+}
+
+.search-header p {
+    font-size: 14px;
+    color: var(--text-secondary, #94a3b8);
+}
+
+.search-bar-wrapper {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.search-input-main {
+    width: 100%;
+    padding: 14px 20px 14px 50px;
+    background-color: var(--card-bg, #1e293b);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    color: #ffffff;
+    font-size: 15px;
+    font-family: inherit;
+    outline: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+}
+
+.search-input-main::placeholder {
+    color: #64748b;
+}
+
+.search-input-main:focus {
+    border-color: #FE7F2D;
+    background-color: #1a2e3a;
+    box-shadow: 0 0 0 3px rgba(254, 127, 45, 0.25);
+}
+
+.search-icon-inside {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+}
+
+.filter-tags-container {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.filter-tags-container::-webkit-scrollbar {
+    height: 4px;
+}
+
+.filter-tags-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+.filter-chip {
+    background-color: var(--card-bg, #1e293b);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+.filter-chip:hover {
+    background-color: #334155;
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.filter-chip.active {
+    background-color: #FE7F2D;
+    color: #ffffff;
+    border-color: #FE7F2D;
+    box-shadow: 0 4px 12px rgba(254, 127, 45, 0.3);
+}
+
+.results-summary {
+    font-size: 13px;
+    font-weight: 500;
+    color: #94a3b8;
+    margin-bottom: 18px;
+    padding-left: 4px;
+}
+
+@media (max-width: 640px) {
+    .search-container {
+        padding: 0 10px 30px;
+    }
+
+    .search-header h2 {
+        font-size: 20px;
+    }
+
+    .search-input-main {
+        padding: 12px 16px 12px 44px;
+        font-size: 14px;
+    }
+
+    .search-icon-inside {
+        left: 14px;
+        width: 18px;
+        height: 18px;
+    }
+
+    .filter-chip {
+        padding: 6px 14px;
+        font-size: 12px;
+    }
+}

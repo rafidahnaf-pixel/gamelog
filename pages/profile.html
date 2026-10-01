@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - GameLog</title>
+    <link rel="stylesheet" href="../assets/css/profile.css">
+    <link rel="stylesheet" href="../base.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400,500,600,700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <aside class="sidebar" id="sidebar"></aside>
+
+    <main class="profile-container">
+
+        <!-- Profile Header -->
+        <section class="profile-header">
+            <div class="profile-avatar" id="profile-avatar">U</div>
+            <div class="profile-info">
+                <h1 id="profile-name">User</h1>
+                <p id="profile-username-display" style="color:#818cf8;font-size:14px;margin-top:2px;">@user</p>
+                <p id="profile-bio-display" style="color:#94a3b8;font-size:13px;margin-top:4px;">Gamer</p>
+            </div>
+            <div class="profile-actions">
+                <button class="secondary-btn" id="edit-profile-btn">
+                    <i data-lucide="edit-2" style="width:16px;height:16px;"></i> Edit Profile
+                </button>
+                <button class="secondary-btn" id="change-password-btn">
+                    <i data-lucide="lock" style="width:16px;height:16px;"></i> Ganti Password
+                </button>
+                <button class="secondary-btn" id="logout-btn" style="color:#ef4444;border-color:rgba(239,68,68,0.3);">
+                    <i data-lucide="log-out" style="width:16px;height:16px;"></i> Logout
+                </button>
+            </div>
+        </section>
+
+        <!-- Profile Grid -->
+        <section class="profile-grid">
+
+            <div class="profile-card">
+                <h2>Profile Information</h2>
+                <div class="profile-item">
+                    <span>Name</span>
+                    <strong id="profile-name-detail">-</strong>
+                </div>
+                <div class="profile-item">
+                    <span>Username</span>
+                    <strong id="profile-username">@user</strong>
+                </div>
+                <div class="profile-item">
+                    <span>Email</span>
+                    <strong id="profile-email">-</strong>
+                </div>
+                <div class="profile-item">
+                    <span>Bio</span>
+                    <strong id="profile-bio">-</strong>
+                </div>
+                <div class="profile-item">
+                    <span>Member Since</span>
+                    <strong id="profile-joined">-</strong>
+                </div>
+            </div>
+
+            <div class="profile-card">
+                <h2>Gaming Stats</h2>
+                <div class="profile-stats">
+                    <div class="profile-stat">
+                        <h3 id="stat-posts">0</h3>
+                        <p>Posts</p>
+                    </div>
+                    <div class="profile-stat">
+                        <h3 id="stat-playing">0</h3>
+                        <p>Playing</p>
+                    </div>
+                    <div class="profile-stat">
+                        <h3 id="stat-completed">0</h3>
+                        <p>Completed</p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- User Posts -->
+        <section class="profile-card">
+            <h2>Postingan Saya</h2>
+            <div id="user-posts" style="display:flex;flex-direction:column;gap:16px;">
+                <p style="text-align:center;color:#94a3b8;padding:20px;">Memuat postingan...</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Change Password Modal -->
+    <div class="modal-overlay" id="change-password-modal">
+        <div class="modal-box" style="background:#1e293b;border-radius:12px;padding:24px;width:90%;max-width:400px;color:#fff;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+                <h3 style="margin:0;font-size:18px;">Ganti Password</h3>
+                <button id="close-password-modal" style="background:none;border:none;color:#94a3b8;font-size:24px;cursor:pointer;">&times;</button>
+            </div>
+            <form id="change-password-form">
+                <div class="form-group" style="margin-bottom:16px;">
+                    <label style="display:block;font-size:13px;margin-bottom:6px;color:#94a3b8;">Password Lama</label>
+                    <input type="password" id="current-password" class="form-control" style="width:100%;padding:10px 14px;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:#fff;font-size:14px;outline:none;" required>
+                </div>
+                <div class="form-group" style="margin-bottom:20px;">
+                    <label style="display:block;font-size:13px;margin-bottom:6px;color:#94a3b8;">Password Baru</label>
+                    <input type="password" id="new-password" class="form-control" style="width:100%;padding:10px 14px;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:#fff;font-size:14px;outline:none;" required>
+                </div>
+                <button type="submit" class="primary-btn" style="width:100%;padding:12px;border:none;border-radius:8px;font-weight:600;cursor:pointer;">Ubah Password</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal-overlay" id="edit-profile-modal">
+        <div class="modal-box" style="background:#1e293b;border-radius:12px;padding:24px;width:90%;max-width:450px;color:#fff;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+                <h3 style="margin:0;font-size:18px;">Edit Profile</h3>
+                <button id="close-edit-modal" style="background:none;border:none;color:#94a3b8;font-size:24px;cursor:pointer;">&times;</button>
+            </div>
+            <form id="edit-profile-form">
+                <div class="form-group" style="margin-bottom:16px;">
+                    <label style="display:block;font-size:13px;margin-bottom:6px;color:#94a3b8;">Name</label>
+                    <input type="text" id="edit-name" class="form-control" style="width:100%;padding:10px 14px;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:#fff;font-size:14px;outline:none;">
+                </div>
+                <div class="form-group" style="margin-bottom:16px;">
+                    <label style="display:block;font-size:13px;margin-bottom:6px;color:#94a3b8;">Username</label>
+                    <input type="text" id="edit-username" class="form-control" style="width:100%;padding:10px 14px;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:#fff;font-size:14px;outline:none;">
+                </div>
+                <div class="form-group" style="margin-bottom:16px;">
+                    <label style="display:block;font-size:13px;margin-bottom:6px;color:#94a3b8;">Email</label>
+                    <input type="email" id="edit-email" class="form-control" style="width:100%;padding:10px 14px;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:#fff;font-size:14px;outline:none;">
+                </div>
+                <div class="form-group" style="margin-bottom:16px;">
+                    <label style="display:block;font-size:13px;margin-bottom:6px;color:#94a3b8;">Bio</label>
+                    <textarea id="edit-bio" class="form-control" rows="3" style="width:100%;padding:10px 14px;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:#fff;font-size:14px;outline:none;resize:vertical;"></textarea>
+                </div>
+                <div class="form-group" style="margin-bottom:20px;">
+                    <label style="display:block;font-size:13px;margin-bottom:6px;color:#94a3b8;">Foto Profile</label>
+                    <input type="file" id="edit-avatar" accept="image/*" style="width:100%;padding:8px;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:#94a3b8;font-size:13px;cursor:pointer;">
+                </div>
+                <button type="submit" class="primary-btn" style="width:100%;padding:12px;border:none;border-radius:8px;font-weight:600;cursor:pointer;">Simpan Perubahan</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        © 2026 GameLog
+    </footer>
+
+    <script src="../assets/js/profile.js"></script>
+    <script src="../assets/js/sidebar.js"></script>
+</body>
+</html>

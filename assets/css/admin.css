@@ -1,0 +1,245 @@
+/* ==========================================
+   GAMELOG - ADMIN PANEL STYLESHEET
+   ========================================== */
+.admin-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding-bottom: 40px;
+}
+
+.admin-header {
+    margin-bottom: 24px;
+}
+
+.admin-header h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text-primary, #f8fafc);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-header p {
+    font-size: 14px;
+    color: var(--text-secondary, #94a3b8);
+    margin-top: 4px;
+}
+
+/* STATS CARDS */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: var(--bg-card, #1e293b);
+    border: 1px solid var(--border-card, rgba(255, 255, 255, 0.08));
+    border-radius: 12px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.stat-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-card h3 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary, #ffffff);
+    line-height: 1;
+}
+
+.stat-card p {
+    font-size: 12px;
+    color: var(--text-secondary, #94a3b8);
+    margin-top: 4px;
+}
+
+/* SEKSI CONTAINER */
+.admin-section {
+    background: var(--bg-card, #1e293b);
+    border: 1px solid var(--border-card, rgba(255, 255, 255, 0.08));
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.section-title {
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.section-title h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary, #ffffff);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* FORM STYLES */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary, #cbd5e1);
+    margin-bottom: 6px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 14px;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 14px;
+    outline: none;
+    transition: border 0.2s;
+}
+
+.form-control:focus {
+    border-color: #FE7F2D;
+}
+
+/* TABLE STYLES */
+.table-container {
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 13px;
+}
+
+.admin-table th {
+    background: rgba(0, 0, 0, 0.3);
+    color: var(--text-secondary, #94a3b8);
+    padding: 12px 14px;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.admin-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-primary, #f1f5f9);
+    vertical-align: middle;
+}
+
+.table-loading {
+    text-align: center;
+    color: var(--text-secondary, #94a3b8);
+    padding: 20px !important;
+}
+
+.mini-cover-img {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+/* BUTTON DANGER */
+.btn-delete {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s;
+    box-shadow: none;
+}
+
+.btn-delete:hover {
+    background: #ef4444;
+    color: #ffffff;
+}
+
+@media (max-width: 600px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Styling Input File agar sama persis seperti di post.html */
+.form-control[type="file"] {
+    display: flex;
+    align-items: center;
+    padding: 6px 10px;
+    background-color: #0d1527; /* Warna background input box */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #94a3b8;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* Styling Tombol 'Choose File' Modern */
+.form-control[type="file"]::file-selector-button {
+    background: #1e293b; /* Gelap sesuai theme post.html */
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-right: 14px;
+    transition: all 0.2s ease;
+}
+
+.form-control[type="file"]::file-selector-button:hover {
+    background: #334155;
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Fallback Support untuk Browser Webkit (Chrome/Safari/Edge Lama) */
+.form-control[type="file"]::-webkit-file-upload-button {
+    background: #1e293b;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-right: 14px;
+    transition: all 0.2s ease;
+}
+
+.form-control[type="file"]::-webkit-file-upload-button:hover {
+    background: #334155;
+    border-color: rgba(255, 255, 255, 0.25);
+}

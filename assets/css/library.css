@@ -1,0 +1,349 @@
+/* ==========================================
+   GAMELOG - LIBRARY PAGE STYLES
+   ========================================== */
+
+/* LIBRARY */
+.library-container {
+    margin-left: 230px;
+    padding: 110px 45px 50px;
+    max-width: 1450px;
+}
+
+.library-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 35px;
+}
+
+.library-header h1 {
+    font-size: 36px;
+    margin-bottom: 8px;
+}
+
+.library-header p {
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+.primary-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 10px 20px;
+    background: #FE7F2D;
+    color: #fff;
+    border: 1px solid #FE7F2D;
+    border-radius: 8px;
+    font-size: 13px;
+    text-decoration: none;
+    transition: .2s;
+}
+
+.primary-btn:hover {
+    background: #e56f1f;
+}
+
+/* STATISTICS */
+.library-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 40px;
+}
+
+.stat-card {
+    background: #1e293b;
+    border: 1px solid #293548;
+    border-radius: 14px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.stat-icon {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #334155;
+    border-radius: 10px;
+    font-size: 20px;
+}
+
+.stat-card p {
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.stat-card h2 {
+    font-size: 24px;
+}
+
+/* FILTER */
+.library-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.library-filter {
+    display: flex;
+    gap: 8px;
+}
+
+.library-filter button {
+    border: none;
+    background: #1e293b;
+    color: #94a3b8;
+    padding: 9px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: .2s;
+}
+
+.library-filter button:hover {
+    color: #fff;
+    background: #334155;
+}
+
+.library-filter .filter-active {
+    background: #FE7F2D;
+    color: #fff;
+}
+
+.library-controls input {
+    width: 230px;
+    padding: 10px 15px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    color: #fff;
+    outline: none;
+    font-family: inherit;
+}
+
+.library-controls input::placeholder {
+    color: #64748b;
+}
+
+.library-controls input:focus {
+    border-color: #2563eb;
+}
+
+/* GAME GRID */
+.game-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.library-game-card {
+    display: flex;
+    background: #1e293b;
+    border: 1px solid #293548;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: .2s;
+}
+
+.library-game-card:hover {
+    transform: translateY(-4px);
+    border-color: #3b82f6;
+}
+
+.library-game-card > img {
+    width: 180px;
+    height: 230px;
+    object-fit: cover;
+}
+
+.library-game-info {
+    flex: 1;
+    padding: 18px;
+}
+
+.game-title {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.game-title h2 {
+    font-size: 18px;
+}
+
+.library-game-info > p {
+    color: #64748b;
+    font-size: 12px;
+    margin: 5px 0 25px;
+}
+
+/* STATUS */
+.status {
+    font-size: 10px;
+    padding: 4px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+.playing {
+    background: #172554;
+    color: #60a5fa;
+}
+
+.completed {
+    background: #052e16;
+    color: #4ade80;
+}
+
+.backlog {
+    background: #422006;
+    color: #fb923c;
+}
+
+/* PROGRESS */
+.library-progress {
+    width: 100%;
+    height: 7px;
+    background: #334155;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.library-bar {
+    height: 100%;
+    background: #2563eb;
+    border-radius: 10px;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    color: #94a3b8;
+    font-size: 11px;
+    margin-top: 7px;
+}
+
+/* GAME BUTTON */
+.game-detail-btn {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    padding: 9px;
+    background: #334155;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 12px;
+    transition: .2s;
+}
+
+.game-detail-btn:hover {
+    background: #2563eb;
+}
+
+/* REQUEST GAME */
+.game-request {
+    margin-top: 35px;
+    padding: 25px;
+    background: #172033;
+    border: 1px solid #293548;
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.game-request h2 {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.game-request p {
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+.secondary-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 10px 20px;
+    color: #fff;
+    text-decoration: none;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    font-size: 13px;
+    transition: .2s;
+}
+
+.secondary-btn:hover {
+    background: #1e293b;
+}
+
+/* RESPONSIVE */
+@media(max-width:1000px) {
+    .library-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .game-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media(max-width:700px) {
+    .library-container {
+        margin-left: 70px;
+        padding: 100px 20px 40px;
+    }
+}
+
+@media(max-width:500px) {
+    .library-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+    .library-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+
+    .library-controls input {
+        width: 100%;
+    }
+
+    .library-filter {
+        overflow-x: auto;
+    }
+
+    .library-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .library-game-card {
+        flex-direction: column;
+    }
+
+    .library-game-card > img {
+        width: 100%;
+        height: 200px;
+    }
+
+    .game-request {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+}

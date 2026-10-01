@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameLog - Reports</title>
+    <link rel="stylesheet" href="../base.css">
+    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400,500,600,700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <aside class="sidebar" id="sidebar"></aside>
+
+    <main class="main-content">
+        <div class="admin-wrapper">
+            
+            <div class="admin-header">
+                <h2><i data-lucide="flag"></i> Laporan & Reports</h2>
+                <p>Kelola laporan dari user tentang postingan yang melanggar.</p>
+            </div>
+
+            <div id="status-msg" style="display: none; padding: 12px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; margin-bottom: 20px;"></div>
+
+            <section class="admin-section">
+                <div class="section-title">
+                    <h3><i data-lucide="flag"></i> Daftar Laporan</h3>
+                </div>
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Pelapor</th>
+                                <th>Terlapor</th>
+                                <th>Alasan</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reports-table-body">
+                            <tr><td colspan="6" class="table-loading">Memuat data laporan...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script src="../assets/js/admin.js"></script>
+    <script src="../assets/js/sidebar.js"></script>
+</body>
+</html>

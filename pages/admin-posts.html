@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameLog - Moderasi Postingan</title>
+    <link rel="stylesheet" href="../base.css">
+    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400,500,600,700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .section-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .section-header-flex .section-title {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        .search-admin-input {
+            padding: 8px 14px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 13px;
+            outline: none;
+            width: 240px;
+            transition: border 0.2s;
+        }
+        .search-admin-input:focus {
+            border-color: #818cf8;
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar" id="sidebar"></aside>
+
+    <main class="main-content">
+        <div class="admin-wrapper">
+            
+            <div class="admin-header">
+                <h2><i data-lucide="file-text"></i> Moderasi Postingan</h2>
+                <p>Pantau dan kelola semua postingan komunitas GameLog.</p>
+            </div>
+
+            <div id="status-msg" style="display: none; padding: 12px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; margin-bottom: 20px;"></div>
+
+            <!-- SEKSI: MODERASI POSTINGAN (DENGAN SEARCH) -->
+            <section class="admin-section">
+                <div class="section-header-flex">
+                    <div class="section-title">
+                        <h3><i data-lucide="file-text"></i> Daftar Postingan</h3>
+                    </div>
+                    <input type="text" id="search-posts" class="search-admin-input" placeholder="Cari user, game, konten...">
+                </div>
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>User</th>
+                                <th>Game</th>
+                                <th>Konten</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="posts-table-body">
+                            <tr><td colspan="6" class="table-loading">Memuat data postingan...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script src="../assets/js/admin.js"></script>
+    <script src="../assets/js/sidebar.js"></script>
+</body>
+</html>

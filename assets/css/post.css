@@ -1,0 +1,161 @@
+/* ==========================================
+   GAMELOG - CREATE POST PAGE STYLES
+   ========================================== */
+
+.create-post-wrapper {
+    max-width: 650px;
+    margin: 20px auto;
+    background-color: #1a2e3a;
+    border: 1px solid #2a4a5a;
+    border-radius: var(--radius-lg);
+    padding: 30px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.create-post-header {
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--border-card);
+    padding-bottom: 16px;
+}
+
+.create-post-header h2 {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.create-post-header h2 i {
+    color: var(--primary);
+}
+
+.create-post-header p {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+/* FORM GROUPS */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.form-control {
+    width: 100%;
+    background-color: #000000;
+    border: 1px solid #2a4a5a;
+    color: #ffffff;
+    padding: 12px 14px;
+    border-radius: var(--radius-md);
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.form-control:focus {
+    border-color: #FE7F2D;
+    box-shadow: 0 0 0 2px rgba(254, 127, 45, 0.2);
+}
+
+textarea.form-control {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* CUSTOM FILE INPUT */
+input[type="file"].form-control {
+    padding: 8px;
+    cursor: pointer;
+}
+
+input[type="file"].form-control::file-selector-button {
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    color: var(--text-primary);
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    margin-right: 12px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    transition: all 0.2s ease;
+}
+
+input[type="file"].form-control::file-selector-button:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #ffffff;
+}
+
+/* FORM ACTIONS */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-card);
+}
+
+.secondary-btn {
+    padding: 10px 20px;
+    border-radius: var(--radius-md);
+    background-color: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-card);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.secondary-btn:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+}
+
+.primary-btn {
+    padding: 10px 24px;
+    border-radius: var(--radius-md);
+    background-color: #FE7F2D;
+    color: #ffffff;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.primary-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    background: #e56f1f;
+}
+
+input[type="file"].form-control::file-selector-button:hover {
+    background: #FE7F2D;
+    border-color: #FE7F2D;
+    color: #ffffff;
+}
+
+.primary-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}

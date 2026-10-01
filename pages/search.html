@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameLog - Search & Explore</title>
+    
+    <link rel="stylesheet" href="../base.css">
+    <link rel="stylesheet" href="../assets/css/home.css">
+    <link rel="stylesheet" href="../assets/css/search.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .search-wrapper {
+            max-width: 680px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .feed-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .post-card {
+            background: #1e293b;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .post-user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .post-user-avatar {
+            width: 38px;
+            height: 38px;
+            background: #312e81;
+            color: #818cf8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .post-user-details h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0;
+            color: #fff;
+        }
+
+        .post-user-details span {
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        .post-game-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .game-mini-cover {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            object-fit: cover;
+        }
+
+        .game-title-text {
+            font-size: 12px;
+            font-weight: 500;
+            color: #cbd5e1;
+        }
+
+        .post-media-container {
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 12px 0;
+            background: #0f172a;
+        }
+
+        .post-media-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .post-body {
+            margin-top: 10px;
+        }
+
+        .post-caption {
+            font-size: 14px;
+            color: #e2e8f0;
+            line-height: 1.5;
+            margin-top: 8px;
+        }
+
+        .username-bold {
+            font-weight: 600;
+            color: #fff;
+            margin-right: 6px;
+        }
+
+        .post-status-tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .status-playing { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+        .status-completed { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
+        .status-backlog { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+        .status-competitive { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+        .status-endgame { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
+
+        .post-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .action-btn:hover, .action-btn.liked {
+            color: #ef4444;
+        }
+
+        /* Modal Komentar */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.active {
+            display: flex !important;
+        }
+        .modal-card {
+            background: #1e293b;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            width: 90%;
+            max-width: 500px;
+            color: #fff;
+        }
+        .modal-header-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .comments-list-box {
+            max-height: 250px;
+            overflow-y: auto;
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .comment-item {
+            background: rgba(0,0,0,0.2);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+        .comment-user {
+            font-weight: 600;
+            color: #818cf8;
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar" id="sidebar"></aside>
+
+    <main class="main-content">
+        <div class="search-wrapper">
+            <div class="search-header">
+                <h2><i data-lucide="search"></i> Cari Game & Postingan</h2>
+                <p>Temukan aktivitas teman, rekomendasi game, atau ulasan terbaru.</p>
+            </div>
+
+            <!-- SEARCH INPUT BAR -->
+            <div class="search-bar-wrapper">
+                <i data-lucide="search" class="search-icon-inside"></i>
+                <input type="text" id="main-search-input" class="search-input-main" placeholder="Cari judul game, username, atau kata kunci ulasan..." autocomplete="off">
+            </div>
+
+            <!-- FILTER CHIPS BY STATUS -->
+            <div class="filter-tags-container">
+                <button type="button" class="filter-chip active" data-status="ALL">Semua</button>
+                <button type="button" class="filter-chip" data-status="Playing">Playing</button>
+                <button type="button" class="filter-chip" data-status="Completed">Completed</button>
+                <button type="button" class="filter-chip" data-status="Backlog">Backlog</button>
+                <button type="button" class="filter-chip" data-status="Competitive">Competitive</button>
+                <button type="button" class="filter-chip" data-status="Endgame">Endgame</button>
+            </div>
+
+            <!-- RINGKASAN HASIL -->
+            <div class="results-summary" id="results-summary">
+                Menampilkan semua postingan terbaru
+            </div>
+
+            <!-- WADAH HASIL PENCARIAN -->
+            <div id="search-results-container" class="feed-container">
+                <p style="text-align: center; color: #94a3b8; padding: 30px;">Memuat postingan...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL KOMENTAR -->
+    <div id="comment-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header-title">
+                <h3><i data-lucide="message-square"></i> Komentar</h3>
+                <button type="button" id="close-modal-btn" style="background:none; border:none; color:#94a3b8; font-size:20px; cursor:pointer;">&times;</button>
+            </div>
+            <div id="comments-list" class="comments-list-box">
+                <p style="color: #aaa; text-align: center;">Memuat komentar...</p>
+            </div>
+            <form id="comment-form" style="display: flex; gap: 8px;">
+                <input type="text" id="comment-input" class="form-control" placeholder="Tulis komentar..." required style="flex:1; padding: 8px 12px; background:#0f172a; border:1px solid rgba(255,255,255,0.1); border-radius:6px; color:#fff;">
+                <button type="submit" class="primary-btn" style="padding: 8px 16px; background:#3b82f6; border:none; border-radius:6px; color:#fff; cursor:pointer;">Kirim</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFIKASI SHARE -->
+    <div id="toast-notif" style="display:none; position:fixed; bottom:20px; right:20px; background:#10b981; color:#fff; padding:10px 18px; border-radius:8px; z-index:10000; font-size:13px; font-weight:500;">
+        Link postingan berhasil disalin!
+    </div>
+
+    <script src="../assets/js/search.js"></script>
+    <script src="../assets/js/sidebar.js"></script>
+</body>
+</html>

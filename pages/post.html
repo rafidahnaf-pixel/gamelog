@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameLog - Buat Postingan Baru</title>
+    
+    <link rel="stylesheet" href="../assets/css/post.css">
+    <link rel="stylesheet" href="../base.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* CSS Modal Request Game */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.active {
+            display: flex !important;
+        }
+        .modal-card {
+            background: #1e293b;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 24px;
+            width: 90%;
+            max-width: 450px;
+            color: #fff;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+        .modal-header-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .modal-header-title h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+        .close-modal-x {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .close-modal-x:hover { color: #fff; }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar" id="sidebar"></aside>
+
+    <main class="main-content">
+        <div class="create-post-wrapper">
+            <div class="create-post-header">
+                <h2><i data-lucide="pen-tool"></i> Buat Postingan Baru</h2>
+                <p>Bagikan tangkapan layar, progres, atau ulasan game yang sedang kamu mainkan.</p>
+            </div>
+
+            <form id="create-post-form" class="post-form-card">
+                <!-- NOTIFIKASI UI Halaman -->
+                <div id="status-msg" style="display: none; padding: 12px 16px; border-radius: 8px; font-size: 14px; font-weight: 500; margin-bottom: 20px;"></div>
+
+                <div class="form-group">
+                    <label for="post-game-id">Pilih Game</label>
+                    <select id="post-game-id" class="form-control" required>
+                        <option value="" disabled selected>-- Memuat Daftar Game... --</option>
+                    </select>
+                    
+                    <p style="font-size: 12px; margin-top: 6px; color: #94a3b8;">
+                        Game kamu belum ada? 
+                        <a href="#" id="open-request-modal" style="color: #818cf8; text-decoration: underline; font-weight: 500;">
+                            Kirim Feedback / Request ke Admin
+                        </a>
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label for="post-status">Status Main</label>
+                    <select id="post-status" class="form-control" required>
+                        <optgroup label="Single-Player & Story">
+                            <option value="Playing">Playing</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Backlog">Backlog</option>
+                        </optgroup>
+                        <optgroup label="Live-Service & Esports">
+                            <option value="Endgame">Endgame / Grinding</option>
+                            <option value="Competitive">Competitive / Ranked</option>
+                            <option value="Main Game">Main Game / Daily</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="post-image">Unggah Cover / Screenshot (Opsional)</label>
+                    <input type="file" id="post-image" class="form-control" accept="image/*">
+                </div>
+
+                <div class="form-group">
+                    <label for="post-content">Ulasan / Catatan</label>
+                    <textarea id="post-content" class="form-control" required rows="5" placeholder="Tulis pendapat atau progres game kamu..."></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <a href="../home.html" class="secondary-btn">Batal</a>
+                    <button type="submit" id="submit-btn" class="primary-btn">Posting Sekarang</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- MODAL CUSTOM UNTUK REQUEST GAME / FEEDBACK -->
+    <div id="request-game-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header-title">
+                <h3><i data-lucide="message-square-plus" style="vertical-align: middle;"></i> Request Game Baru</h3>
+                <button type="button" class="close-modal-x" id="close-request-modal">&times;</button>
+            </div>
+            <p style="font-size: 13px; color: #94a3b8; margin-bottom: 16px;">Tuliskan judul game yang ingin kamu tambahkan. Admin akan segera meninjau dan memasukkannya ke database.</p>
+            
+            <form id="request-game-form">
+                <div class="form-group">
+                    <label for="req-game-name" style="display: block; font-size: 13px; margin-bottom: 6px;">Judul Game / Catatan</label>
+                    <input type="text" id="req-game-name" class="form-control" placeholder="Contoh: Wuthering Waves, Roblox, dll..." required autocomplete="off">
+                </div>
+                <div class="form-actions" style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                    <button type="button" id="btn-cancel-req" class="secondary-btn" style="padding: 8px 16px;">Batal</button>
+                    <button type="submit" id="btn-send-req" class="primary-btn" style="padding: 8px 16px;">Kirim Request</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../assets/js/post.js"></script>
+    <script src="../assets/js/sidebar.js"></script>
+</body>
+</html>

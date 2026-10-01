@@ -1,0 +1,112 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Poppins,sans-serif;
+}
+
+body{
+
+    background:#0f172a;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    height:100vh;
+
+}
+
+.login-box{
+
+    width:400px;
+
+    background:#1e293b;
+
+    padding:40px;
+
+    border-radius:20px;
+
+}
+
+.login-box h1{
+
+    text-align:center;
+
+    color:white;
+
+    margin-bottom:10px;
+
+}
+
+.login-box h2{
+
+    text-align:center;
+
+    color:#ccc;
+
+    margin-bottom:30px;
+
+}
+
+input{
+
+    width:100%;
+
+    padding:15px;
+
+    margin-bottom:15px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#334155;
+
+    color:white;
+
+}
+
+button{
+
+    width:100%;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#2563eb;
+
+    color:white;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+}
+
+button:hover{
+
+    background:#1d4ed8;
+
+}
+
+p{
+
+    margin-top:20px;
+
+    text-align:center;
+
+    color:white;
+
+}
+
+a{
+
+    color:#60a5fa;
+
+}

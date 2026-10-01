@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameLog - Track Your Games</title>
+    
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="base.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <aside class="sidebar" id="sidebar"></aside>
+
+    <main class="main-content">
+
+        <section class="welcome">
+            <h1>Track your games.<br>Share your progress.</h1>
+            <p>Simpan progress game kamu, bagikan pencapaian, dan lihat perjalanan gaming pemain lain.</p>
+            <div class="welcome-buttons">
+                <a href="pages/register.html" class="primary-btn" id="get-started-btn">Get Started</a>
+                <a href="#feed" class="secondary-btn">Explore</a>
+            </div>
+        </section>
+
+        <div id="feed" class="content-layout">
+            
+            <div class="feed-section">
+                
+                <div class="post-cta-card" id="post-cta-container" style="display: none;">
+                    <div class="post-cta-content">
+                        <i data-lucide="square-plus"></i>
+                        <span>Ingin membagikan progres game terbaru?</span>
+                    </div>
+                    <a href="pages/post.html" class="primary-btn">Buat Postingan</a>
+                </div>
+
+                <div class="post-form-card" id="login-prompt-card" style="text-align: center; padding: 30px;">
+                    <i data-lucide="lock" style="width: 32px; height: 32px; color: var(--primary); margin-bottom: 10px;"></i>
+                    <h3 style="margin-bottom: 5px;">Ingin membuat postingan?</h3>
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 15px;">Kamu harus login terlebih dahulu untuk membagikan progress game-mu.</p>
+                    <a href="pages/login.html" class="primary-btn" style="display: inline-flex;">Login Sekarang</a>
+                </div>
+
+                <div class="feed-header">
+                    <h2>Recent Activity</h2>
+                    <span style="color: var(--text-secondary); font-size: 13px;">Public Feed</span>
+                </div>
+
+                <div class="feed-container" id="feed-container">
+                    <!-- Feed items dari backend -->
+                </div>
+            </div>
+
+            <aside class="right">
+                <h2 style="font-size: 16px; margin-bottom: 15px;">Trending Games</h2>
+                <div id="trending-games-container">
+                    <p style="color: var(--text-secondary); font-size: 13px; text-align: center; padding: 20px;">Memuat...</p>
+                </div>
+            </aside>
+
+        </div>
+    </main>
+
+    <!-- Modal Komentar -->
+    <div class="modal-overlay" id="comment-modal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Komentar</h3>
+                <button type="button" class="close-btn" id="close-modal-btn">&times;</button>
+            </div>
+            <div class="comments-list" id="comments-list">
+                <!-- List komentar -->
+            </div>
+            <form class="comment-form" id="comment-form">
+                <input type="text" id="comment-input" class="comment-input" placeholder="Tulis komentar..." required autocomplete="off">
+                <button type="submit" class="primary-btn" style="padding: 8px 16px;">Kirim</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Report Modal -->
+    <div class="modal-overlay" id="report-modal">
+        <div class="modal-box" style="background:#1a2e3a;border-radius:12px;padding:24px;width:90%;max-width:450px;color:#fff;">
+            <div class="modal-header">
+                <h3>Laporkan Postingan</h3>
+                <button type="button" class="close-btn" id="close-report-modal">&times;</button>
+            </div>
+            <form id="report-form">
+                <div style="margin-bottom:16px;">
+                    <label style="display:block;font-size:13px;margin-bottom:6px;color:#b8c8d8;">Alasan Laporan</label>
+                    <select id="report-reason" style="width:100%;padding:10px 14px;background:#000000;border:1px solid #2a4a5a;border-radius:8px;color:#fff;font-size:14px;outline:none;">
+                        <option value="">-- Pilih Alasan --</option>
+                        <option value="spam">Spam</option>
+                        <option value="inappropriate">Konten Tidak Pantas</option>
+                        <option value="harassment">Pelecehan</option>
+                        <option value="violence">Kekerasan</option>
+                        <option value="other">Lainnya</option>
+                    </select>
+                </div>
+                <div style="margin-bottom:20px;">
+                    <label style="display:block;font-size:13px;margin-bottom:6px;color:#b8c8d8;">Detail Laporan (Opsional)</label>
+                    <textarea id="report-description" rows="3" style="width:100%;padding:10px 14px;background:#000000;border:1px solid #2a4a5a;border-radius:8px;color:#fff;font-size:14px;outline:none;resize:vertical;" placeholder="Jelaskan lebih detail..."></textarea>
+                </div>
+                <button type="submit" class="primary-btn" style="width:100%;padding:12px;border:none;border-radius:8px;font-weight:600;cursor:pointer;background:#FE7F2D;color:#fff;">Kirim Laporan</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notifikasi -->
+    <div class="toast-notif" id="toast-notif">Link berhasil disalin!</div>
+
+    <footer>
+        © 2026 GameLog. All rights reserved.
+    </footer>
+
+    <!-- HANYA PANGGIL MAIN.JS DI SINI -->
+    <script src="main.js"></script>
+    <script src="assets/js/sidebar.js"></script>
+</body>
+</html>

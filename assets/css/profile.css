@@ -1,0 +1,248 @@
+/* ==========================================
+   GAMELOG - PROFILE PAGE STYLES
+   ========================================== */
+
+/* PROFILE CONTAINER */
+.profile-container {
+    margin-left: 230px;
+    padding: 45px 45px 50px;
+    max-width: 900px;
+}
+
+/* PROFILE HEADER */
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 30px;
+    margin-bottom: 25px;
+    background: #1e293b;
+    border: 1px solid #293548;
+    border-radius: 15px;
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #FE7F2D;
+    font-size: 30px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.profile-info h1 {
+    font-size: 28px;
+    margin-bottom: 4px;
+}
+
+.profile-info p {
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+.secondary-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    padding: 0 20px;
+    color: #fff;
+    text-decoration: none;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    font-size: 13px;
+    transition: .2s;
+}
+
+.secondary-btn:hover {
+    background: #2a4a5a;
+}
+
+/* GRID */
+.profile-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(300px, 1fr);
+    gap: 25px;
+    margin-bottom: 25px;
+}
+
+.profile-card {
+    background: #1e293b;
+    border: 1px solid #293548;
+    border-radius: 15px;
+    padding: 25px;
+}
+
+.profile-card h2 {
+    font-size: 19px;
+    margin-bottom: 20px;
+}
+
+/* INFORMATION */
+.profile-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #334155;
+}
+
+.profile-item:last-child {
+    border-bottom: none;
+}
+
+.profile-item span {
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+.profile-item strong {
+    font-size: 13px;
+}
+
+/* STATS */
+.profile-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.profile-stat {
+    padding: 20px 10px;
+    text-align: center;
+    background: #0f172a;
+    border-radius: 10px;
+}
+
+.profile-stat h3 {
+    font-size: 25px;
+    margin-bottom: 5px;
+}
+
+.profile-stat p {
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+/* RECENT GAMES */
+.recent-games {
+    margin-bottom: 25px;
+}
+
+.profile-games {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.profile-game {
+    display: flex;
+    gap: 15px;
+    padding: 12px;
+    background: #0f172a;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.profile-game img {
+    width: 110px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 7px;
+    flex-shrink: 0;
+}
+
+.profile-game-info {
+    min-width: 0;
+}
+
+.profile-game-info h3 {
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.profile-game-info p {
+    color: #94a3b8;
+    font-size: 11px;
+    margin-bottom: 7px;
+}
+
+.profile-game-info span {
+    color: #60a5fa;
+    font-size: 11px;
+}
+
+/* PROFILE ACTIONS */
+.profile-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* MODAL */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-overlay.active {
+    display: flex !important;
+}
+
+/* RESPONSIVE */
+@media(max-width:1000px) {
+    .profile-grid {
+        grid-template-columns: 1fr;
+    }
+    .profile-games {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media(max-width:500px) {
+    .profile-header {
+        padding: 20px;
+    }
+
+    .profile-avatar {
+        width: 65px;
+        height: 65px;
+    }
+
+    .profile-info h1 {
+        font-size: 23px;
+    }
+
+    .profile-stats {
+        gap: 8px;
+    }
+
+    .profile-stat {
+        padding: 15px 5px;
+    }
+
+    .profile-stat h3 {
+        font-size: 20px;
+    }
+
+    .profile-game img {
+        width: 90px;
+        height: 70px;
+    }
+}
