@@ -116,8 +116,8 @@ app.post('/api/register', async (req, res) => {
 
             // Cek secret code untuk admin
             const role = req.body.secret_code === 'gamelog-admin-2026' ? 'admin' : 'user';
-            const insertQuery = "INSERT INTO users (username, email, password, role, is_banned) VALUES (?, ?, ?, ?, 0)";
-            db.query(insertQuery, [username, email, hashedPassword], (err, result) => {
+            const insertQuery = "INSERT INTO users (username, email, password, role, is_banned) VALUES (?, ?, ?, ?, ?)";
+            db.query(insertQuery, [username, email, hashedPassword, role, 0], (err, result) => {
                 if (err) return res.status(500).json({ error: err.message });
 
                 res.status(201).json({
