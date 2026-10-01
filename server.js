@@ -7,7 +7,7 @@ const fs = require('fs');
 const bcrypt = require('bcrypt');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Middleware Wajib
 app.use(cors({
@@ -233,17 +233,32 @@ app.post('/api/games', upload.single('cover'), (req, res) => {
     });
 });
 
-// Update Game
-app.put('/api/games/:id', (req, res) => {
+// Update Game (DIPERBARUI UNTUK MENDUKUNG UPLOAD FILE)
+app.put('/api/games/:id', upload.single('cover'), (req, res) => {
     const gameId = req.params.id;
-    const { title, genre, cover_url } = req.body;
+    const { title, genre, cover_url: inputCoverUrl } = req.body;
 
     if (!title || !genre) {
         return res.status(400).json({ message: 'Judul dan genre wajib diisi!' });
     }
 
-    const query = 'UPDATE games SET title = ?, genre = ?, cover_url = ? WHERE id = ?';
-    db.query(query, [title, genre, cover_url || null, gameId], (err) => {
+    let finalCoverUrl = inputCoverUrl || null;
+    
+    // Jika ada file fisik yang diunggah, gunakan file tersebut
+    if (req.file) {
+        finalCoverUrl = `/uploads/${req.file.filename}`;
+    }
+
+    let query, params;
+    if (finalCoverUrl) {
+        query = 'UPDATE games SET title = ?, genre = ?, cover_url = ? WHERE id = ?';
+        params = [title, genre, finalCoverUrl, gameId];
+    } else {
+        query = 'UPDATE games SET title = ?, genre = ? WHERE id = ?';
+        params = [title, genre, gameId];
+    }
+
+    db.query(query, params, (err) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json({ message: 'Game berhasil diperbarui!' });
     });

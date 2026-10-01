@@ -224,7 +224,6 @@ async function loadReportsTable() {
 window.resolveReport = async function(id) {
     if (!confirm('Resolve laporan ini? Postingan yang dilaporkan akan dihapus.')) return;
     try {
-        // Ambil post_id dari report
         const reportsRes = await fetch(`${API_URL}/api/reports`);
         const reports = await reportsRes.json();
         const report = reports.find(r => r.id === id);
@@ -234,17 +233,12 @@ window.resolveReport = async function(id) {
             return;
         }
 
-        // Hapus postingan yang dilaporkan
-        const deleteRes = await fetch(`${API_URL}/api/posts/${report.post_id}`, {
-            method: 'DELETE'
-        });
-
+        const deleteRes = await fetch(`${API_URL}/api/posts/${report.post_id}`, { method: 'DELETE' });
         if (!deleteRes.ok) {
             showMessage('Gagal menghapus postingan.');
             return;
         }
 
-        // Update status report jadi resolved
         const res = await fetch(`${API_URL}/api/reports/${id}/status`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -300,7 +294,7 @@ async function loadFeedbacksTable() {
     }
 }
 
-// 7. Event Listener Pencarian Real-Time (hanya untuk elemen yang ada)
+// 7. Event Listener Pencarian Real-Time
 function initSearchListeners() {
     // Search Game
     const searchGames = document.getElementById('search-games');
@@ -383,11 +377,19 @@ if (addGameForm) {
     });
 }
 
+// -----------------------------------------------------------------
+// UPDATE 1: Fungsi openEditGame ditambahkan reset file input
+// -----------------------------------------------------------------
 window.openEditGame = function(id, title, genre, coverUrl) {
     document.getElementById('edit-game-id').value = id;
     document.getElementById('edit-game-title').value = title;
     document.getElementById('edit-game-genre').value = genre;
     document.getElementById('edit-game-cover').value = coverUrl || '';
+    
+    // Reset file input setiap kali modal edit dibuka
+    const fileInput = document.getElementById('edit-game-cover-file');
+    if (fileInput) fileInput.value = '';
+
     document.getElementById('edit-game-modal').classList.add('active');
 };
 
@@ -401,23 +403,40 @@ document.getElementById('edit-game-modal')?.addEventListener('click', (e) => {
     }
 });
 
+// -----------------------------------------------------------------
+// UPDATE 2: Edit Game Submit menggunakan FormData (Mendukung file)
+// -----------------------------------------------------------------
 document.getElementById('edit-game-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const id = document.getElementById('edit-game-id').value;
     const title = document.getElementById('edit-game-title').value.trim();
     const genre = document.getElementById('edit-game-genre').value.trim();
-    const cover_url = document.getElementById('edit-game-cover').value.trim();
+    const coverUrl = document.getElementById('edit-game-cover').value.trim();
+    
+    // Ambil file cover jika admin memilih file dari laptop
+    const coverFile = document.getElementById('edit-game-cover-file')?.files[0];
 
     if (!title || !genre) {
         showMessage('Judul dan genre wajib diisi!');
         return;
     }
 
+    // Gunakan FormData karena akan mengirim file
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('genre', genre);
+    
+    if (coverFile) {
+        formData.append('cover', coverFile);
+    } else if (coverUrl) {
+        formData.append('cover_url', coverUrl);
+    }
+
     try {
         const res = await fetch(`${API_URL}/api/games/${id}`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title, genre, cover_url })
+            // Headers 'Content-Type' tidak disetel manual agar browser otomatis mengatur format multipart/form-data
+            body: formData
         });
 
         if (res.ok) {
@@ -483,13 +502,15 @@ window.deleteFeedback = async function(id) {
     } catch (err) { showMessage('Gagal menghapus feedback.'); }
 };
 
-// Inisialisasi berdasarkan halaman
+// -----------------------------------------------------------------
+// UPDATE 3: Inisialisasi pengecekan nama file 'admin-game.html'
+// -----------------------------------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
     if (window.lucide) lucide.createIcons();
     
     if (currentPage === 'admin.html') {
         loadDashboardStats();
-    } else if (currentPage === 'admin-games.html') {
+    } else if (currentPage === 'admin-game.html' || currentPage === 'admin-games.html') { // Tambah admin-game.html
         loadGamesTable();
         initSearchListeners();
     } else if (currentPage === 'admin-users.html') {
