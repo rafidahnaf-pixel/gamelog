@@ -81,10 +81,13 @@ function renderGames(data) {
         return `
             <tr>
                 <td>#${g.id}</td>
-                <td><img src="${cover}" class="mini-cover-img" alt="${g.title}" onerror="this.src='https://placehold.co/60x60/1e293b/818cf8?text=Game'"></td>
+                <td><img src="${cover}" class="mini-cover-img" alt="${g.title}" onerror="this.src='https://placehold.co/60x60/233D4D/FE7F2D?text=Game'"></td>
                 <td><b>${g.title}</b></td>
-                <td><span style="background: rgba(99, 102, 241, 0.15); color: #818cf8; padding: 2px 8px; border-radius: 4px; font-size: 11px;">${g.genre || 'Game'}</span></td>
+                <td><span style="background: rgba(254, 127, 45, 0.15); color: #FE7F2D; padding: 2px 8px; border-radius: 4px; font-size: 11px;">${g.genre || 'Game'}</span></td>
                 <td>
+                    <button class="btn-edit" style="background: rgba(54, 173, 163, 0.15); color: #36ADA3; border: 1px solid rgba(54, 173, 163, 0.3); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; margin-right: 5px;" onclick="openEditGame(${g.id}, '${g.title.replace(/'/g, "\\'")}', '${(g.genre || '').replace(/'/g, "\\'")}', '${g.cover_url || ''}')">
+                        <i data-lucide="edit-2" style="width: 14px; height: 14px;"></i> Edit
+                    </button>
                     <button class="btn-delete" onclick="deleteGame(${g.id})">
                         <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i> Hapus
                     </button>
@@ -379,6 +382,56 @@ if (addGameForm) {
         } catch (err) { showMessage('Gagal terhubung ke server.'); }
     });
 }
+
+window.openEditGame = function(id, title, genre, coverUrl) {
+    document.getElementById('edit-game-id').value = id;
+    document.getElementById('edit-game-title').value = title;
+    document.getElementById('edit-game-genre').value = genre;
+    document.getElementById('edit-game-cover').value = coverUrl || '';
+    document.getElementById('edit-game-modal').classList.add('active');
+};
+
+document.getElementById('close-edit-modal')?.addEventListener('click', () => {
+    document.getElementById('edit-game-modal').classList.remove('active');
+});
+
+document.getElementById('edit-game-modal')?.addEventListener('click', (e) => {
+    if (e.target === document.getElementById('edit-game-modal')) {
+        document.getElementById('edit-game-modal').classList.remove('active');
+    }
+});
+
+document.getElementById('edit-game-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = document.getElementById('edit-game-id').value;
+    const title = document.getElementById('edit-game-title').value.trim();
+    const genre = document.getElementById('edit-game-genre').value.trim();
+    const cover_url = document.getElementById('edit-game-cover').value.trim();
+
+    if (!title || !genre) {
+        showMessage('Judul dan genre wajib diisi!');
+        return;
+    }
+
+    try {
+        const res = await fetch(`${API_URL}/api/games/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title, genre, cover_url })
+        });
+
+        if (res.ok) {
+            showMessage('Game berhasil diperbarui!', true);
+            document.getElementById('edit-game-modal').classList.remove('active');
+            loadGamesTable();
+        } else {
+            const data = await res.json();
+            showMessage(data.message || 'Gagal memperbarui game.');
+        }
+    } catch (err) {
+        showMessage('Gagal terhubung ke server.');
+    }
+});
 
 window.deleteGame = async function(gameId) {
     if (!confirm(`Hapus Game #${gameId}? Semua postingan terkait juga akan terhapus.`)) return;

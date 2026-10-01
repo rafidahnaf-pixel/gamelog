@@ -233,6 +233,22 @@ app.post('/api/games', upload.single('cover'), (req, res) => {
     });
 });
 
+// Update Game
+app.put('/api/games/:id', (req, res) => {
+    const gameId = req.params.id;
+    const { title, genre, cover_url } = req.body;
+
+    if (!title || !genre) {
+        return res.status(400).json({ message: 'Judul dan genre wajib diisi!' });
+    }
+
+    const query = 'UPDATE games SET title = ?, genre = ?, cover_url = ? WHERE id = ?';
+    db.query(query, [title, genre, cover_url || null, gameId], (err) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ message: 'Game berhasil diperbarui!' });
+    });
+});
+
 // Hapus Game
 app.delete('/api/games/:id', (req, res) => {
     const gameId = req.params.id;
