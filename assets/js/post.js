@@ -26,21 +26,40 @@ function showMessage(msg, isSuccess = false) {
     }
 }
 
+let allGames = [];
+
 async function loadGameOptions() {
     const selectGame = document.getElementById('post-game-id');
     try {
         const response = await fetch(`${API_URL}/api/games`);
         if (response.ok) {
-            const games = await response.json();
-            selectGame.innerHTML = '<option value="" disabled selected>-- Pilih Game --</option>';
-            games.forEach(game => {
-                selectGame.innerHTML += `<option value="${game.id}">${game.title}</option>`;
-            });
+            allGames = await response.json();
+            renderGameOptions(allGames);
         }
     } catch (err) {
         console.error('Gagal mengambil daftar game:', err);
         selectGame.innerHTML = '<option value="" disabled>Gagal memuat game</option>';
     }
+}
+
+function renderGameOptions(games) {
+    const selectGame = document.getElementById('post-game-id');
+    if (!selectGame) return;
+    selectGame.innerHTML = '<option value="" disabled selected>-- Pilih Game --</option>';
+    games.forEach(game => {
+        selectGame.innerHTML += `<option value="${game.id}">${game.title}</option>`;
+    });
+}
+
+function filterGames() {
+    const searchInput = document.getElementById('game-search');
+    if (!searchInput) return;
+    const query = searchInput.value.toLowerCase().trim();
+    const filtered = allGames.filter(game => 
+        game.title.toLowerCase().includes(query) || 
+        (game.genre && game.genre.toLowerCase().includes(query))
+    );
+    renderGameOptions(filtered);
 }
 
 // LOGIKA MODAL POPUP REQUEST GAME
@@ -110,6 +129,12 @@ document.addEventListener('DOMContentLoaded', () => {
     checkAdminStatus();
     loadGameOptions();
     initRequestGameModal();
+
+    // Search game filter
+    const gameSearch = document.getElementById('game-search');
+    if (gameSearch) {
+        gameSearch.addEventListener('input', filterGames);
+    }
 
     const createPostForm = document.getElementById('create-post-form');
     const submitBtn = document.getElementById('submit-btn');
