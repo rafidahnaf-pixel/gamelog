@@ -114,7 +114,7 @@ app.post('/api/register', async (req, res) => {
             // Hash password
             const hashedPassword = await bcrypt.hash(password, 10);
 
-            const insertQuery = 'INSERT INTO users (username, email, password, role, is_banned) VALUES (?, ?, ?, "user", 0)';
+            const insertQuery = "INSERT INTO users (username, email, password, role, is_banned) VALUES (?, ?, ?, 'user', 0)";
             db.query(insertQuery, [username, email, hashedPassword], (err, result) => {
                 if (err) return res.status(500).json({ error: err.message });
 
