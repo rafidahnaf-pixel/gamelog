@@ -238,10 +238,117 @@ body.admin-mode .btn-delete {
     color: var(--primary);
 }
 
-/* RESPONSIVE LAYOUT GLOBAL */
+/* MODAL - z-index lebih tinggi dari sidebar */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-overlay.active {
+    display: flex !important;
+}
+
+/* RESPONSIVE LAYOUT GLOBAL - Mobile: sidebar di bawah */
 @media (max-width: 700px) {
-    .sidebar { width: 70px; padding: 20px 10px; }
-    .sidebar h2 span, .sidebar a span { display: none; }
-    .sidebar h2, .sidebar a { justify-content: center; }
-    .main-content, footer { margin-left: 70px; padding: 0 20px 40px; }
+    .sidebar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        top: auto;
+        width: 100%;
+        height: 60px;
+        padding: 8px 10px;
+        border-right: none;
+        border-top: 2px solid #233D4D;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        overflow-x: auto;
+        overflow-y: hidden;
+        z-index: 1000;
+    }
+
+    .sidebar h2 {
+        display: none;
+    }
+
+    .sidebar a {
+        flex-direction: column;
+        gap: 4px;
+        padding: 6px 10px;
+        margin-bottom: 0;
+        font-size: 10px;
+        min-width: 60px;
+        text-align: center;
+    }
+
+    .sidebar a [data-lucide] {
+        width: 20px;
+        height: 20px;
+    }
+
+    .sidebar a span {
+        display: block;
+        font-size: 9px;
+    }
+
+    .sidebar a:hover {
+        transform: none;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 20px 15px 80px;
+    }
+
+    footer {
+        margin-left: 0;
+        padding: 20px 15px 80px;
+    }
+
+    .content-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .right {
+        position: static;
+        order: -1;
+        margin-bottom: 20px;
+    }
+
+    .welcome h1 {
+        font-size: 28px;
+    }
+
+    .welcome p {
+        font-size: 14px;
+    }
+
+    .post-actions {
+        flex-wrap: wrap;
+    }
+
+    .admin-actions {
+        flex-direction: column;
+    }
+
+    .profile-actions {
+        flex-direction: column;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .admin-quick-link {
+        padding: 15px;
+    }
 }
