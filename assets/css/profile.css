@@ -215,18 +215,53 @@
     }
 }
 
-@media(max-width:500px) {
+@media(max-width:700px) {
+    .profile-container {
+        padding: 15px 15px 80px;
+    }
+
     .profile-header {
-        padding: 20px;
+        flex-direction: column;
+        text-align: center;
+        padding: 20px 15px;
     }
 
     .profile-avatar {
-        width: 65px;
-        height: 65px;
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
     }
 
     .profile-info h1 {
-        font-size: 23px;
+        font-size: 20px;
+    }
+
+    .profile-info p {
+        font-size: 12px;
+    }
+
+    .profile-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .profile-actions button {
+        width: 100%;
+    }
+
+    .profile-card {
+        padding: 15px;
+    }
+
+    .profile-card h2 {
+        font-size: 16px;
+    }
+
+    .profile-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        padding: 10px 0;
     }
 
     .profile-stats {
@@ -234,15 +269,31 @@
     }
 
     .profile-stat {
-        padding: 15px 5px;
+        padding: 12px 5px;
     }
 
     .profile-stat h3 {
-        font-size: 20px;
+        font-size: 18px;
+    }
+
+    .profile-stat p {
+        font-size: 10px;
+    }
+
+    .profile-games {
+        grid-template-columns: 1fr;
     }
 
     .profile-game img {
-        width: 90px;
-        height: 70px;
+        width: 80px;
+        height: 60px;
+    }
+
+    .profile-game-info h3 {
+        font-size: 13px;
+    }
+
+    .profile-game-info p {
+        font-size: 10px;
     }
 }
