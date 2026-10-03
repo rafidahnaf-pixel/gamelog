@@ -5,6 +5,14 @@ const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
 const bcrypt = require('bcrypt');
+const cloudinary = require('cloudinary').v2;
+
+// Cloudinary Config
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -207,7 +215,7 @@ app.get('/api/games', (req, res) => {
 });
 
 // Tambah Game Baru
-app.post('/api/games', upload.single('cover'), (req, res) => {
+app.post('/api/games', upload.single('cover'), async (req, res) => {
     const { title, genre, cover_url: inputCoverUrl } = req.body;
 
     if (!title) {
@@ -216,7 +224,15 @@ app.post('/api/games', upload.single('cover'), (req, res) => {
 
     let finalCoverUrl = inputCoverUrl || null;
     if (req.file) {
-        finalCoverUrl = `/uploads/${req.file.filename}`;
+        try {
+            const result = await cloudinary.uploader.upload(req.file.path, {
+                folder: 'gamelog/games',
+                resource_type: 'image'
+            });
+            finalCoverUrl = result.secure_url;
+        } catch (err) {
+            console.error('❌ Cloudinary upload error:', err.message);
+        }
     }
 
     const insertQuery = 'INSERT INTO games (title, genre, cover_url) VALUES (?, ?, ?)';
@@ -333,7 +349,7 @@ app.get('/api/posts', (req, res) => {
 });
 
 // Create Post
-app.post('/api/posts', upload.single('image'), (req, res) => {
+app.post('/api/posts', upload.single('image'), async (req, res) => {
     const { user_id, game_id, content, status } = req.body;
 
     if (!user_id || !game_id || !content) {
@@ -342,7 +358,15 @@ app.post('/api/posts', upload.single('image'), (req, res) => {
 
     let post_image = null;
     if (req.file) {
-        post_image = `/uploads/${req.file.filename}`;
+        try {
+            const result = await cloudinary.uploader.upload(req.file.path, {
+                folder: 'gamelog/posts',
+                resource_type: 'image'
+            });
+            post_image = result.secure_url;
+        } catch (err) {
+            console.error('❌ Cloudinary upload error:', err.message);
+        }
     }
 
     const insertQuery = 'INSERT INTO posts (user_id, game_id, content, status, post_image) VALUES (?, ?, ?, ?, ?)';
@@ -682,13 +706,21 @@ app.get('/api/notifications/unread-count', (req, res) => {
 // ==========================================
 
 // Update profile user
-app.put('/api/users/:id/profile', upload.single('avatar'), (req, res) => {
+app.put('/api/users/:id/profile', upload.single('avatar'), async (req, res) => {
     const userId = req.params.id;
     const { name, username, email, bio } = req.body;
     
     let avatarUrl = null;
     if (req.file) {
-        avatarUrl = `/uploads/${req.file.filename}`;
+        try {
+            const result = await cloudinary.uploader.upload(req.file.path, {
+                folder: 'gamelog/avatars',
+                resource_type: 'image'
+            });
+            avatarUrl = result.secure_url;
+        } catch (err) {
+            console.error('❌ Cloudinary upload error:', err.message);
+        }
     }
     
     let query = 'UPDATE users SET name = ?, username = ?, email = ?, bio = ?';
