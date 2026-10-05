@@ -2,7 +2,7 @@
 // GAME LOG - FRONTEND SCRIPT (main.js)
 // ==========================================
 
-const API_URL = '';
+const API_URL = window.location.port === '3000' ? '' : (window.location.origin.includes('localhost') ? 'http://localhost:3000' : window.location.origin);
 let activePostId = null;
 
 // 1. Check Status Login User
@@ -72,7 +72,7 @@ function formatImageUrl(imagePath) {
         return imagePath;
     }
     const cleanPath = imagePath.startsWith('/') ? imagePath : `/${imagePath}`;
-    return cleanPath;
+    return `${API_URL}${cleanPath}`;
 }
 
 function showToast(message) {

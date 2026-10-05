@@ -1,6 +1,6 @@
 lucide.createIcons();
 
-const API_URL = '';
+const API_URL = window.location.port === '3000' ? '' : (window.location.origin.includes('localhost') ? 'http://localhost:3000' : window.location.origin);
 let allPosts = [];
 let selectedStatus = 'ALL';
 let userLikes = [];

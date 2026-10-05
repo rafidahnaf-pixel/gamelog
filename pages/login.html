@@ -114,7 +114,8 @@
                 const payload = { username, password };
                 console.log('Mengirim payload login:', payload);
 
-                const response = await fetch('/api/login', {
+                const apiBase = window.location.port === '3000' ? '' : (window.location.origin.includes('localhost') ? 'http://localhost:3000' : window.location.origin);
+                const response = await fetch(`${apiBase}/api/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
@@ -128,7 +129,7 @@
                     
                     // Fetch data user lengkap dari server
                     try {
-                        const userRes = await fetch(`/api/users/${userData.id}`);
+                        const userRes = await fetch(`${apiBase}/api/users/${userData.id}`);
                         if (userRes.ok) {
                             const fullUserData = await userRes.json();
                             localStorage.setItem('user', JSON.stringify({ ...userData, ...fullUserData }));

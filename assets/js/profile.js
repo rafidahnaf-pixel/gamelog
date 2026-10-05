@@ -1,4 +1,4 @@
-const API_URL = '';
+const API_URL = window.location.port === '3000' ? '' : (window.location.origin.includes('localhost') ? 'http://localhost:3000' : window.location.origin);
 
 // Get user from localStorage
 let currentUser = JSON.parse(localStorage.getItem('user'));
