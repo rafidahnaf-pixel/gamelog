@@ -3,6 +3,12 @@ const API_URL = window.location.port === '3000' ? '' : (window.location.origin.i
 // Get user from localStorage
 let currentUser = JSON.parse(localStorage.getItem('user'));
 
+// Cek apakah ada parameter ?id= di URL (lihat profile user lain)
+const urlParams = new URLSearchParams(window.location.search);
+const profileUserId = urlParams.get('id');
+const isOwnProfile = !profileUserId || parseInt(profileUserId) === currentUser?.id;
+const targetUserId = isOwnProfile ? currentUser.id : parseInt(profileUserId);
+
 if (!currentUser || !currentUser.id) {
     document.querySelector('.profile-container').innerHTML = 
         '<p style="text-align:center;color:#94a3b8;padding:50px;">Silakan login untuk melihat profile.</p>';
@@ -12,29 +18,58 @@ if (!currentUser || !currentUser.id) {
 
 async function initProfile() {
     try {
-        // Fetch latest user data from server
-        const userRes = await fetch(`${API_URL}/api/users/${currentUser.id}`);
+        // Fetch user data from server
+        const userRes = await fetch(`${API_URL}/api/users/${targetUserId}`);
         if (!userRes.ok) throw new Error('Gagal load user');
         
         const user = await userRes.json();
         
-        // Update localStorage dengan data terbaru
-        currentUser = { ...currentUser, ...user };
-        localStorage.setItem('user', JSON.stringify(currentUser));
+        // Update localStorage hanya jika ini profile sendiri
+        if (isOwnProfile) {
+            currentUser = { ...currentUser, ...user };
+            localStorage.setItem('user', JSON.stringify(currentUser));
+        }
         
         // Render profile
         renderProfile(user);
         
+        // Tampilkan/tembunyikan tombol berdasarkan apakah ini profile sendiri
+        toggleProfileActions(isOwnProfile);
+        
+        // Cek status follow jika melihat profile user lain
+        if (!isOwnProfile) {
+            await checkFollowStatus();
+        }
+        
         // Load posts
-        await loadUserPosts(currentUser.id);
+        await loadUserPosts(targetUserId);
         
     } catch (err) {
         console.error('Gagal memuat profile:', err);
         // Fallback: tampilkan data dari localStorage
-        if (currentUser) {
+        if (currentUser && isOwnProfile) {
             renderProfile(currentUser);
             await loadUserPosts(currentUser.id);
         }
+    }
+}
+
+function toggleProfileActions(isOwn) {
+    const editBtn = document.getElementById('edit-profile-btn');
+    const changePassBtn = document.getElementById('change-password-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+    const followBtn = document.getElementById('follow-btn');
+    
+    if (isOwn) {
+        if (editBtn) editBtn.style.display = 'inline-flex';
+        if (changePassBtn) changePassBtn.style.display = 'inline-flex';
+        if (logoutBtn) logoutBtn.style.display = 'inline-flex';
+        if (followBtn) followBtn.style.display = 'none';
+    } else {
+        if (editBtn) editBtn.style.display = 'none';
+        if (changePassBtn) changePassBtn.style.display = 'none';
+        if (logoutBtn) logoutBtn.style.display = 'none';
+        if (followBtn) followBtn.style.display = 'inline-flex';
     }
 }
 
@@ -105,7 +140,7 @@ async function loadUserPosts(userId) {
             return `
                 <div class="post-card" style="background:#1e293b;border:1px solid #293548;border-radius:12px;overflow:hidden;">
                     <div class="post-header" style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;">
-                        <div class="post-user-info" style="display:flex;align-items:center;gap:12px;">
+                        <div class="post-user-info" style="display:flex;align-items:center;gap:12px;cursor:pointer;" onclick="window.location.href='profile.html?id=${p.user_id}'">
                             ${userAvatar}
                             <div>
                                 <div style="font-size:14px;font-weight:600;">${p.name || p.username || 'User'}</div>
@@ -255,6 +290,68 @@ document.getElementById('change-password-form')?.addEventListener('submit', asyn
     } catch (err) {
         console.error('Gagal mengubah password:', err);
         alert('Gagal mengubah password');
+    }
+});
+
+// Cek status follow dan update tampilan tombol
+async function checkFollowStatus() {
+    if (isOwnProfile || !profileUserId) return;
+    
+    try {
+        const res = await fetch(`${API_URL}/api/follow/status?follower_id=${currentUser.id}&following_id=${profileUserId}`);
+        if (res.ok) {
+            const data = await res.json();
+            updateFollowButton(data.following);
+        }
+    } catch (err) {
+        console.error('Gagal cek status follow:', err);
+    }
+}
+
+function updateFollowButton(isFollowing) {
+    const followBtn = document.getElementById('follow-btn');
+    if (!followBtn) return;
+    
+    if (isFollowing) {
+        followBtn.innerHTML = '<i data-lucide="user-check" style="width:16px;height:16px;"></i> Following';
+        followBtn.style.background = 'rgba(54, 173, 163, 0.15)';
+        followBtn.style.color = '#36ADA3';
+        followBtn.style.borderColor = 'rgba(54, 173, 163, 0.3)';
+    } else {
+        followBtn.innerHTML = '<i data-lucide="user-plus" style="width:16px;height:16px;"></i> Follow';
+        followBtn.style.background = 'transparent';
+        followBtn.style.color = '#fff';
+        followBtn.style.borderColor = '#2a4a5a';
+    }
+    
+    if (window.lucide) lucide.createIcons();
+}
+
+// Follow / Unfollow
+document.getElementById('follow-btn')?.addEventListener('click', async () => {
+    if (!profileUserId) return;
+    
+    try {
+        const res = await fetch(`${API_URL}/api/follow`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                follower_id: currentUser.id,
+                following_id: profileUserId
+            })
+        });
+        
+        const data = await res.json();
+        
+        if (res.ok) {
+            updateFollowButton(data.following);
+            showToast(data.following ? 'Berhasil follow!' : 'Berhasil unfollow!');
+        } else {
+            alert(data.message || 'Gagal follow');
+        }
+    } catch (err) {
+        console.error('Gagal follow:', err);
+        alert('Gagal terhubung ke server');
     }
 });
 

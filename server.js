@@ -321,6 +321,7 @@ app.get('/api/posts', (req, res) => {
     const query = `
         SELECT 
             posts.id,
+            posts.user_id,
             posts.content,
             posts.status,
             posts.post_image,
@@ -335,7 +336,7 @@ app.get('/api/posts', (req, res) => {
         JOIN users ON posts.user_id = users.id
         JOIN games ON posts.game_id = games.id
         LEFT JOIN likes ON posts.id = likes.post_id
-        GROUP BY posts.id, users.username, users.name, users.avatar, games.title, games.cover_url, posts.created_at
+        GROUP BY posts.id, posts.user_id, users.username, users.name, users.avatar, games.title, games.cover_url, posts.created_at
         ORDER BY posts.id DESC
     `;
 
@@ -372,6 +373,18 @@ app.post('/api/posts', upload.single('image'), async (req, res) => {
     const insertQuery = 'INSERT INTO posts (user_id, game_id, content, status, post_image) VALUES (?, ?, ?, ?, ?)';
     db.query(insertQuery, [user_id, game_id, content, status || 'Playing', post_image], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
+
+        // Kirim notifikasi ke semua follower yang user ini posting
+        const followersQuery = 'SELECT follower_id FROM follows WHERE following_id = ?';
+        db.query(followersQuery, [user_id], (err, followers) => {
+            if (!err && followers.length > 0) {
+                followers.forEach(f => {
+                    const notifMsg = `${user.username || 'User'} membuat postingan baru`;
+                    db.query('INSERT INTO notifications (user_id, type, message, related_id) VALUES (?, ?, ?, ?)',
+                        [f.follower_id, 'new_post', notifMsg, result.insertId]);
+                });
+            }
+        });
 
         res.status(201).json({
             message: 'Postingan berhasil diterbitkan!',
@@ -596,6 +609,97 @@ app.put('/api/reports/:id/status', (req, res) => {
 });
 
 // ==========================================
+// ENDPOINT FOLLOW
+// ==========================================
+
+// Follow user
+app.post('/api/follow', (req, res) => {
+    const { follower_id, following_id } = req.body;
+    
+    if (!follower_id || !following_id) {
+        return res.status(400).json({ message: 'Data tidak lengkap!' });
+    }
+    
+    if (follower_id === following_id) {
+        return res.status(400).json({ message: 'Tidak bisa follow diri sendiri!' });
+    }
+
+    const checkQuery = 'SELECT * FROM follows WHERE follower_id = ? AND following_id = ?';
+    db.query(checkQuery, [follower_id, following_id], (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        
+        if (results.length > 0) {
+            // Unfollow
+            db.query('DELETE FROM follows WHERE follower_id = ? AND following_id = ?', [follower_id, following_id], (err) => {
+                if (err) return res.status(500).json({ error: err.message });
+                res.json({ message: 'Unfollow berhasil', following: false });
+            });
+        } else {
+            // Follow
+            db.query('INSERT INTO follows (follower_id, following_id) VALUES (?, ?)', [follower_id, following_id], (err) => {
+                if (err) return res.status(500).json({ error: err.message });
+                
+                // Notifikasi ke user yang di-follow
+                db.query('SELECT username FROM users WHERE id = ?', [follower_id], (err, userResults) => {
+                    if (!err && userResults.length > 0) {
+                        const message = `${userResults[0].username} mulai mengikuti kamu`;
+                        db.query('INSERT INTO notifications (user_id, type, message, related_id) VALUES (?, ?, ?, ?)', 
+                            [following_id, 'follow', message, follower_id]);
+                    }
+                });
+                
+                res.json({ message: 'Follow berhasil', following: true });
+            });
+        }
+    });
+});
+
+// Cek status follow
+app.get('/api/follow/status', (req, res) => {
+    const { follower_id, following_id } = req.query;
+    
+    if (!follower_id || !following_id) {
+        return res.status(400).json({ message: 'Data tidak lengkap!' });
+    }
+
+    const query = 'SELECT * FROM follows WHERE follower_id = ? AND following_id = ?';
+    db.query(query, [follower_id, following_id], (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ following: results.length > 0 });
+    });
+});
+
+// Ambil daftar following user
+app.get('/api/users/:id/following', (req, res) => {
+    const userId = req.params.id;
+    const query = `
+        SELECT u.id, u.username, u.name, u.avatar 
+        FROM follows f 
+        JOIN users u ON f.following_id = u.id 
+        WHERE f.follower_id = ?
+    `;
+    db.query(query, [userId], (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(results);
+    });
+});
+
+// Ambil daftar followers user
+app.get('/api/users/:id/followers', (req, res) => {
+    const userId = req.params.id;
+    const query = `
+        SELECT u.id, u.username, u.name, u.avatar 
+        FROM follows f 
+        JOIN users u ON f.follower_id = u.id 
+        WHERE f.following_id = ?
+    `;
+    db.query(query, [userId], (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(results);
+    });
+});
+
+// ==========================================
 // ENDPOINT STATISTICS
 // ==========================================
 
@@ -746,6 +850,7 @@ app.get('/api/users/:id/posts', (req, res) => {
     const query = `
         SELECT 
             posts.id,
+            posts.user_id,
             posts.content,
             posts.status,
             posts.post_image,
@@ -761,7 +866,7 @@ app.get('/api/users/:id/posts', (req, res) => {
         JOIN games ON posts.game_id = games.id
         LEFT JOIN likes ON posts.id = likes.post_id
         WHERE posts.user_id = ?
-        GROUP BY posts.id, users.username, users.name, users.avatar, games.title, games.cover_url, posts.created_at
+        GROUP BY posts.id, posts.user_id, users.username, users.name, users.avatar, games.title, games.cover_url, posts.created_at
         ORDER BY posts.id DESC
     `;
     

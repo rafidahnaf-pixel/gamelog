@@ -89,6 +89,8 @@
     const profileLink = sidebar.querySelector('a[href$="profile.html"]');
     if (profileLink) {
         profileLink.style.marginTop = '30px';
+        // Selalu ke profile sendiri (tanpa parameter ?id=)
+        profileLink.href = base + 'pages/profile.html';
     }
 
     // Ganti icon Profile di sidebar dengan avatar user (hanya jika login)
