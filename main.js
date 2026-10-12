@@ -205,7 +205,7 @@ function renderPostsToUI(posts, userLikes = []) {
 
         postElement.innerHTML = `
             <div class="post-header">
-                <div class="post-user-info">
+                <div class="post-user-info" style="cursor:pointer;" onclick="window.location.href='pages/profile.html?id=${post.user_id}'">
                     ${userAvatar}
                     <div class="post-user-details">
                         <h3>${post.name || post.username || 'Anonymous'}</h3>
