@@ -1,5 +1,18 @@
 const API_URL = window.location.port === '3000' ? '' : (window.location.origin.includes('localhost') ? 'http://localhost:3000' : window.location.origin);
 
+// Helper untuk API call dengan retry
+async function apiFetch(url, options = {}, retries = 3) {
+    for (let i = 0; i < retries; i++) {
+        try {
+            const res = await fetch(url, options);
+            return res;
+        } catch (err) {
+            if (i === retries - 1) throw err;
+            await new Promise(r => setTimeout(r, 1000 * (i + 1)));
+        }
+    }
+}
+
 // Get user from localStorage
 let currentUser = JSON.parse(localStorage.getItem('user'));
 
@@ -40,6 +53,9 @@ async function initProfile() {
         if (!isOwnProfile) {
             await checkFollowStatus();
         }
+        
+        // Load followers & following
+        await loadFollowData(targetUserId);
         
         // Load posts
         await loadUserPosts(targetUserId);
@@ -298,7 +314,7 @@ async function checkFollowStatus() {
     if (isOwnProfile || !profileUserId) return;
     
     try {
-        const res = await fetch(`${API_URL}/api/follow/status?follower_id=${currentUser.id}&following_id=${profileUserId}`);
+        const res = await apiFetch(`${API_URL}/api/follow/status?follower_id=${currentUser.id}&following_id=${profileUserId}`);
         if (res.ok) {
             const data = await res.json();
             updateFollowButton(data.following);
@@ -332,7 +348,7 @@ document.getElementById('follow-btn')?.addEventListener('click', async () => {
     if (!profileUserId) return;
     
     try {
-        const res = await fetch(`${API_URL}/api/follow`, {
+        const res = await apiFetch(`${API_URL}/api/follow`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -351,9 +367,60 @@ document.getElementById('follow-btn')?.addEventListener('click', async () => {
         }
     } catch (err) {
         console.error('Gagal follow:', err);
-        alert('Gagal terhubung ke server');
+        alert('Gagal terhubung ke server. Coba lagi.');
     }
 });
+
+// Load followers & following
+async function loadFollowData(userId) {
+    try {
+        // Load followers
+        const followersRes = await apiFetch(`${API_URL}/api/users/${userId}/followers`);
+        if (followersRes.ok) {
+            const followers = await followersRes.json();
+            renderFollowList('followers-list', followers, 'Belum ada followers.');
+            setText('followers-count', `${followers.length} orang mengikuti`);
+        }
+
+        // Load following
+        const followingRes = await apiFetch(`${API_URL}/api/users/${userId}/following`);
+        if (followingRes.ok) {
+            const following = await followingRes.json();
+            renderFollowList('following-list', following, 'Belum follow siapa pun.');
+            setText('following-count', `Mengikuti ${following.length} orang`);
+        }
+    } catch (err) {
+        console.error('Gagal memuat follow data:', err);
+        setText('followers-count', 'Gagal memuat');
+        setText('following-count', 'Gagal memuat');
+    }
+}
+
+function renderFollowList(elementId, users, emptyMsg) {
+    const container = document.getElementById(elementId);
+    if (!container) return;
+
+    if (!Array.isArray(users) || users.length === 0) {
+        container.innerHTML = `<p style="color:#64748b;font-size:13px;">${emptyMsg}</p>`;
+        return;
+    }
+
+    container.innerHTML = users.map(u => {
+        const avatar = u.avatar 
+            ? `<img src="${u.avatar}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;" alt="${u.username}">`
+            : `<div style="width:36px;height:36px;border-radius:50%;background:#FE7F2D;display:flex;align-items:center;justify-content:center;font-weight:600;color:#fff;font-size:14px;flex-shrink:0;">${(u.username || 'U').charAt(0).toUpperCase()}</div>`;
+
+        return `
+            <div style="display:flex;align-items:center;gap:12px;padding:8px;background:rgba(0,0,0,0.2);border-radius:8px;cursor:pointer;" onclick="window.location.href='profile.html?id=${u.id}'">
+                ${avatar}
+                <div>
+                    <div style="font-size:14px;font-weight:600;">${u.name || u.username || 'User'}</div>
+                    <div style="font-size:11px;color:#94a3b8;">@${u.username || 'user'}</div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
 
 // Logout
 document.getElementById('logout-btn')?.addEventListener('click', () => {

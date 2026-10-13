@@ -288,7 +288,7 @@ async function loadComments(postId) {
             return `
                 <div class="comment-item">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px;">
-                        <span class="comment-user">${c.username || 'User'}</span>
+                        <span class="comment-user" style="cursor:pointer;font-weight:600;color:#FE7F2D;" onclick="window.location.href='pages/profile.html?id=${c.user_id}'">${c.username || 'User'}</span>
                         <span style="font-size: 10px; color: #94a3b8;">${commentTime}</span>
                     </div>
                     <div>${c.comment}</div>

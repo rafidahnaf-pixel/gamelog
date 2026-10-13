@@ -87,8 +87,27 @@
         </section>
 
         <!-- User Posts -->
+        <!-- Followers & Following -->
+        <section class="profile-grid">
+            <div class="profile-card">
+                <h2><i data-lucide="users"></i> Followers</h2>
+                <p id="followers-count" style="font-size:14px;color:#94a3b8;margin-bottom:15px;">Memuat...</p>
+                <div id="followers-list" style="display:flex;flex-direction:column;gap:10px;">
+                    <p style="color:#64748b;font-size:13px;">Belum ada followers.</p>
+                </div>
+            </div>
+            <div class="profile-card">
+                <h2><i data-lucide="user-plus"></i> Following</h2>
+                <p id="following-count" style="font-size:14px;color:#94a3b8;margin-bottom:15px;">Memuat...</p>
+                <div id="following-list" style="display:flex;flex-direction:column;gap:10px;">
+                    <p style="color:#64748b;font-size:13px;">Belum follow siapa pun.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- User Posts -->
         <section class="profile-card">
-            <h2>Postingan Saya</h2>
+            <h2>Postingan</h2>
             <div id="user-posts" style="display:flex;flex-direction:column;gap:16px;">
                 <p style="text-align:center;color:#94a3b8;padding:20px;">Memuat postingan...</p>
             </div>

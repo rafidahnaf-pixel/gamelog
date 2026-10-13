@@ -469,7 +469,7 @@ app.get('/api/users/:userId/likes', (req, res) => {
 app.get('/api/posts/:postId/comments', (req, res) => {
     const { postId } = req.params;
     const query = `
-        SELECT comments.id, comments.comment, comments.created_at, users.username
+        SELECT comments.id, comments.user_id, comments.comment, comments.created_at, users.username
         FROM comments
         JOIN users ON comments.user_id = users.id
         WHERE comments.post_id = ?
