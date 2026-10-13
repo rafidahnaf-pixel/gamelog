@@ -47,7 +47,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// Koneksi Database MySQL dengan auto-reconnect
+// Koneksi Database MySQL dengan auto-reconnect dan retry saat startup
 const dbConfig = {
     host: process.env.DB_HOST || 'localhost',
     user: process.env.DB_USER || 'root',
@@ -59,11 +59,11 @@ const dbConfig = {
 
 const db = mysql.createConnection(dbConfig);
 
-function handleDisconnect() {
+function handleDisconnect(retryDelay = 2000, maxRetries = Infinity) {
     db.connect((err) => {
         if (err) {
-            console.error('❌ Koneksi database gagal:', err.message);
-            setTimeout(handleDisconnect, 2000);
+            console.error(`❌ Koneksi database gagal: ${err.message}. Retry dalam ${retryDelay}ms...`);
+            setTimeout(() => handleDisconnect(retryDelay), retryDelay);
         } else {
             console.log('✅ Terhubung ke Database MySQL!');
         }
@@ -71,11 +71,16 @@ function handleDisconnect() {
 
     db.on('error', (err) => {
         console.error('❌ Database Runtime Error:', err.message);
-        if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+        if (err.code === 'PROTOCOL_CONNECTION_LOST' || err.code === 'ECONNREFUSED' || err.code === 'ENOTFOUND') {
             handleDisconnect();
         } else {
-            throw err;
+            console.error('❌ Error tidak ditangani:', err.message);
         }
+    });
+
+    db.on('close', () => {
+        console.warn('⚠️ Koneksi database ditutup. Mencoba reconnect...');
+        handleDisconnect();
     });
 }
 
