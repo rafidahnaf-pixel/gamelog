@@ -1,6 +1,12 @@
 /* ==========================================
-   GAMELOG - NOTIFICATION PAGE STYLES
+   GAMEHUB - NOTIFICATION PAGE STYLES
    ========================================== */
+
+body {
+    font-family: 'Poppins', sans-serif !important;
+    background: #000000;
+    color: #ffffff;
+}
 
 /* HEADER */
 .notification-header {

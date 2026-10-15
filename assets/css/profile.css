@@ -1,6 +1,12 @@
 /* ==========================================
-   GAMELOG - PROFILE PAGE STYLES
+   GAMEHUB - PROFILE PAGE STYLES
    ========================================== */
+
+body {
+    font-family: 'Poppins', sans-serif !important;
+    background: #000000;
+    color: #ffffff;
+}
 
 /* PROFILE CONTAINER */
 .profile-container {
