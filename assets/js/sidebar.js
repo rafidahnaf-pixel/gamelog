@@ -27,7 +27,7 @@
         sidebar.innerHTML = `
             <h2>
                 <i data-lucide="gamepad-2"></i>
-                <span>GameLog</span>
+                <span>GameHub</span>
             </h2>
             <a href="${base}pages/admin.html" class="${isActive('admin.html')}">
                 <i data-lucide="shield-check"></i> <span>Dashboard</span>
@@ -56,7 +56,7 @@
         sidebar.innerHTML = `
             <h2>
                 <i data-lucide="gamepad-2"></i>
-                <span>GameLog</span>
+                <span>GameHub</span>
             </h2>
             <a href="${base}home.html" class="${isActive('home.html')}">
                 <i data-lucide="home"></i> <span>Home</span>

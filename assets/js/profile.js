@@ -373,26 +373,35 @@ document.getElementById('follow-btn')?.addEventListener('click', async () => {
 
 // Load followers & following
 async function loadFollowData(userId) {
+    // Set default count
+    setText('followers-count', '0 orang mengikuti');
+    setText('following-count', 'Mengikuti 0 orang');
+
     try {
         // Load followers
         const followersRes = await apiFetch(`${API_URL}/api/users/${userId}/followers`);
         if (followersRes.ok) {
             const followers = await followersRes.json();
-            renderFollowList('followers-list', followers, 'Belum ada followers.');
-            setText('followers-count', `${followers.length} orang mengikuti`);
+            if (Array.isArray(followers)) {
+                renderFollowList('followers-list', followers, 'Belum ada followers.');
+                setText('followers-count', `${followers.length} orang mengikuti`);
+            }
         }
 
         // Load following
         const followingRes = await apiFetch(`${API_URL}/api/users/${userId}/following`);
         if (followingRes.ok) {
             const following = await followingRes.json();
-            renderFollowList('following-list', following, 'Belum follow siapa pun.');
-            setText('following-count', `Mengikuti ${following.length} orang`);
+            if (Array.isArray(following)) {
+                renderFollowList('following-list', following, 'Belum follow siapa pun.');
+                setText('following-count', `Mengikuti ${following.length} orang`);
+            }
         }
     } catch (err) {
         console.error('Gagal memuat follow data:', err);
-        setText('followers-count', 'Gagal memuat');
-        setText('following-count', 'Gagal memuat');
+        // Count tetap 0, tapi list tampil error
+        renderFollowList('followers-list', [], 'Gagal memuat followers.');
+        renderFollowList('following-list', [], 'Gagal memuat following.');
     }
 }
 
