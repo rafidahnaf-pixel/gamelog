@@ -59,19 +59,26 @@ const dbConfig = {
 
 const db = mysql.createConnection(dbConfig);
 
-function handleDisconnect(retryDelay = 2000, maxRetries = Infinity) {
+let isConnected = false;
+let reconnectTimeout = null;
+
+function handleDisconnect() {
+    if (reconnectTimeout) clearTimeout(reconnectTimeout);
+    
+    isConnected = false;
     db.connect((err) => {
         if (err) {
-            console.error(`❌ Koneksi database gagal: ${err.message}. Retry dalam ${retryDelay}ms...`);
-            setTimeout(() => handleDisconnect(retryDelay), retryDelay);
+            console.error(`❌ Koneksi database gagal: ${err.message}. Retry dalam 3 detik...`);
+            reconnectTimeout = setTimeout(handleDisconnect, 3000);
         } else {
+            isConnected = true;
             console.log('✅ Terhubung ke Database MySQL!');
         }
     });
 
     db.on('error', (err) => {
         console.error('❌ Database Runtime Error:', err.message);
-        if (err.code === 'PROTOCOL_CONNECTION_LOST' || err.code === 'ECONNREFUSED' || err.code === 'ENOTFOUND') {
+        if (['PROTOCOL_CONNECTION_LOST', 'ECONNREFUSED', 'ENOTFOUND', 'ER_CON_COUNT_ERROR', 'ETIMEDOUT'].includes(err.code)) {
             handleDisconnect();
         } else {
             console.error('❌ Error tidak ditangani:', err.message);
