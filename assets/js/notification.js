@@ -45,10 +45,11 @@ async function loadNotifications() {
 
 function getNotificationIcon(type) {
     switch(type) {
-        case 'like': return '❤️';
-        case 'comment': return '💬';
-        case 'game_added': return '🎮';
-        default: return '🔔';
+        case 'like': return '<i data-lucide="heart" style="width:20px;height:20px;color:#ef4444;"></i>';
+        case 'comment': return '<i data-lucide="message-square" style="width:20px;height:20px;color:#818cf8;"></i>';
+        case 'follow': return '<i data-lucide="user-plus" style="width:20px;height:20px;color:#36ADA3;"></i>';
+        case 'new_post': return '<i data-lucide="file-text" style="width:20px;height:20px;color:#fbbf24;"></i>';
+        default: return '<i data-lucide="bell" style="width:20px;height:20px;color:#94a3b8;"></i>';
     }
 }
 
