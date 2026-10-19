@@ -94,7 +94,12 @@ function renderProfile(user) {
     const avatarEl = document.getElementById('profile-avatar');
     if (avatarEl) {
         if (user.avatar) {
-            avatarEl.innerHTML = `<img src="${API_URL}${user.avatar}" alt="${user.username}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+            // Jika avatar sudah URL absolut (Cloudinary), gunakan langsung. 
+            // Jika path relatif, tambahkan API_URL di depannya.
+            const avatarSrc = (user.avatar.startsWith('http://') || user.avatar.startsWith('https://'))
+                ? user.avatar
+                : `${API_URL}${user.avatar}`;
+            avatarEl.innerHTML = `<img src="${avatarSrc}" alt="${user.username}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
         } else {
             avatarEl.textContent = (user.username || 'U').charAt(0).toUpperCase();
         }
