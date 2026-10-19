@@ -372,7 +372,7 @@ document.getElementById('follow-btn')?.addEventListener('click', async () => {
         }
     } catch (err) {
         console.error('Gagal follow:', err);
-        // Verifikasi apakah follow sebenarnya sudah berhasil di server
+        // Verifikasi apakah follow sebenarnya sudah berhasil di server (jika request terkirim tapi response gagal)
         try {
             const statusRes = await fetch(`${API_URL}/api/follow/status?follower_id=${currentUser.id}&following_id=${profileUserId}`);
             if (statusRes.ok) {
@@ -381,11 +381,16 @@ document.getElementById('follow-btn')?.addEventListener('click', async () => {
                     updateFollowButton(true);
                     showToast('Berhasil follow!');
                     return;
+                } else {
+                    updateFollowButton(false);
+                    showToast('Berhasil unfollow!');
+                    return;
                 }
             }
         } catch (statusErr) {
             console.error('Gagal verifikasi status follow:', statusErr);
         }
+        // Jika benar-benar tidak bisa terhubung, baru tampilkan alert
         alert('Gagal terhubung ke server. Coba lagi.');
     }
 });
@@ -435,17 +440,17 @@ function renderFollowList(elementId, users, emptyMsg) {
 
     container.innerHTML = users.map(u => {
         const avatar = u.avatar 
-            ? `<img src="${u.avatar}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;" alt="${u.username}">`
-            : `<div style="width:36px;height:36px;border-radius:50%;background:#FE7F2D;display:flex;align-items:center;justify-content:center;font-weight:600;color:#fff;font-size:14px;flex-shrink:0;">${(u.username || 'U').charAt(0).toUpperCase()}</div>`;
+            ? `<img src="${u.avatar}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;" alt="${u.username}">`
+            : `<div style="width:32px;height:32px;border-radius:50%;background:#FE7F2D;display:flex;align-items:center;justify-content:center;font-weight:600;color:#fff;font-size:13px;flex-shrink:0;">${(u.username || 'U').charAt(0).toUpperCase()}</div>`;
 
         return `
-            <div style="display:flex;align-items:center;gap:12px;padding:8px;background:rgba(0,0,0,0.2);border-radius:8px;cursor:pointer;" onclick="window.location.href='profile.html?id=${u.id}'">
+            <a href="profile.html?id=${u.id}" style="display:flex;align-items:center;gap:12px;padding:8px;background:rgba(0,0,0,0.2);border-radius:8px;text-decoration:none;color:inherit;">
                 ${avatar}
                 <div>
-                    <div style="font-size:14px;font-weight:600;">${u.name || u.username || 'User'}</div>
+                    <div style="font-size:13px;font-weight:600;">${u.name || u.username || 'User'}</div>
                     <div style="font-size:11px;color:#94a3b8;">@${u.username || 'user'}</div>
                 </div>
-            </div>
+            </a>
         `;
     }).join('');
 }

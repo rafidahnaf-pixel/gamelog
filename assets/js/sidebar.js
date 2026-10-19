@@ -79,6 +79,9 @@
                 <i data-lucide="shield-alert"></i> <span>Admin Panel</span>
             </a>
             ` : ''}
+            <a href="#" id="sidebar-logout-btn" style="color: #ef4444; margin-top: 25px; border-top: 1px solid #2a4a5a; padding-top: 12px; display: block; width: 100%; text-align: left;">
+                <i data-lucide="log-out"></i> <span>Logout</span>
+            </a>
         `;
     }
 
