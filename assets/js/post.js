@@ -45,7 +45,7 @@ async function loadGameOptions() {
 function renderGameOptions(games) {
     const selectGame = document.getElementById('post-game-id');
     if (!selectGame) return;
-    selectGame.innerHTML = '<option value="" disabled selected>-- Pilih Game --</option>';
+    selectGame.innerHTML = '<option value="" disabled selected>Pilih Game</option>';
     games.forEach(game => {
         selectGame.innerHTML += `<option value="${game.id}">${game.title}</option>`;
     });

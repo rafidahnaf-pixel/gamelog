@@ -94,7 +94,7 @@ async function fetchGamesSelect() {
         const response = await fetch(`${API_URL}/api/games`);
         const games = await response.json();
 
-        gameSelect.innerHTML = '<option value="" disabled selected>-- Pilih Game --</option>';
+        gameSelect.innerHTML = '<option value="" disabled selected>Pilih Game</option>';
         games.forEach(game => {
             const option = document.createElement('option');
             option.value = game.id;
@@ -160,6 +160,19 @@ async function fetchPosts() {
         }
 
         renderPostsToUI(posts, userLikes);
+
+        // Scroll ke postingan spesifik jika URL memiliki hash #post-<id>
+        const hash = window.location.hash;
+        if (hash && hash.startsWith('#post-')) {
+            const postId = hash.replace('#post-', '');
+            const postEl = document.getElementById('post-' + postId);
+            if (postEl) {
+                postEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // Tandai postingan secara visual (highlight sementara)
+                postEl.style.border = '2px solid #818cf8';
+                setTimeout(() => { postEl.style.border = ''; }, 2500);
+            }
+        }
     } catch (error) {
         console.error('❌ Gagal konek ke server backend:', error);
         feedContainer.innerHTML = '<p style="color: #ef4444; text-align: center;">Gagal memuat postingan.</p>';
@@ -180,6 +193,7 @@ function renderPostsToUI(posts, userLikes = []) {
     posts.forEach(post => {
         const postElement = document.createElement('article');
         postElement.classList.add('post-card');
+        postElement.id = 'post-' + post.id;
 
         const isLiked = Array.isArray(userLikes) && userLikes.includes(post.id);
         const userInitial = (post.username || 'U').charAt(0).toUpperCase();

@@ -27,17 +27,27 @@ async function loadNotifications() {
             const icon = getNotificationIcon(n.type);
             const unreadClass = n.is_read ? '' : 'unread';
             
+            // Judul notifikasi berdasarkan tipe
+            let notifTitle = 'Notifikasi Baru';
+            if (n.type === 'like') notifTitle = 'Postingan Disukai';
+            else if (n.type === 'comment') notifTitle = 'Komentar Baru';
+            else if (n.type === 'follow') notifTitle = 'Pengikut Baru';
+            else if (n.type === 'new_post') notifTitle = 'Postingan Baru';
+            
             return `
                 <div class="notification ${unreadClass}" data-id="${n.id}" onclick="markAsRead(${n.id})">
                     <div class="notification-icon">${icon}</div>
                     <div class="notification-content">
-                        <h3>${n.type === 'like' ? 'Postingan Disukai' : 'Komentar Baru'}</h3>
+                        <h3>${notifTitle}</h3>
                         <p>${n.message}</p>
                         <span>${timeAgo}</span>
                     </div>
                 </div>
             `;
         }).join('');
+
+        // Re-render ikon lucide setelah notifikasi dimasukkan ke DOM
+        if (window.lucide) lucide.createIcons();
     } catch (err) {
         listContainer.innerHTML = '<p style="text-align:center;color:#ef4444;padding:30px;">Gagal memuat notifikasi.</p>';
     }

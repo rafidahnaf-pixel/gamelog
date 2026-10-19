@@ -367,6 +367,20 @@ document.getElementById('follow-btn')?.addEventListener('click', async () => {
         }
     } catch (err) {
         console.error('Gagal follow:', err);
+        // Verifikasi apakah follow sebenarnya sudah berhasil di server
+        try {
+            const statusRes = await fetch(`${API_URL}/api/follow/status?follower_id=${currentUser.id}&following_id=${profileUserId}`);
+            if (statusRes.ok) {
+                const statusData = await statusRes.json();
+                if (statusData.following) {
+                    updateFollowButton(true);
+                    showToast('Berhasil follow!');
+                    return;
+                }
+            }
+        } catch (statusErr) {
+            console.error('Gagal verifikasi status follow:', statusErr);
+        }
         alert('Gagal terhubung ke server. Coba lagi.');
     }
 });
