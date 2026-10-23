@@ -352,3 +352,26 @@ body.admin-mode .btn-delete {
         padding: 15px;
     }
 }
+
+/* PAGINATION BUTTONS */
+.pagination-btn {
+    padding: 6px 10px;
+    font-size: 13px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #cbd5e1;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.pagination-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #818cf8;
+    color: #fff;
+}
+.pagination-btn.active {
+    background: #818cf8;
+    border-color: #818cf8;
+    color: #fff;
+    font-weight: 600;
+}

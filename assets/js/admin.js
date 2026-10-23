@@ -4,6 +4,37 @@ const API_URL = window.location.port === '3000' ? '' : (window.location.origin.i
 let allGames = [];
 let allUsers = [];
 let allPosts = [];
+let allReports = [];
+let allFeedbacks = [];
+
+// Pagination state per table
+const paginationState = {
+    games: { page: 1, perPage: 10 },
+    users: { page: 1, perPage: 10 },
+    posts: { page: 1, perPage: 10 },
+    reports: { page: 1, perPage: 10 },
+    feedbacks: { page: 1, perPage: 10 }
+};
+
+function renderPagination(containerId, totalItems, perPage, currentPage, onPageChange) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const totalPages = Math.ceil(totalItems / perPage) || 1;
+    if (totalPages <= 1) {
+        container.innerHTML = '';
+        return;
+    }
+    let html = '';
+    for (let i = 1; i <= totalPages; i++) {
+        html += `<button class="pagination-btn ${i === currentPage ? 'active' : ''}" onclick="onPageChange(${i})">${i}</button>`;
+    }
+    container.innerHTML = html;
+}
+
+function paginateArray(array, page, perPage) {
+    const start = (page - 1) * perPage;
+    return array.slice(start, start + perPage);
+}
 
 // 1. Proteksi Akses Admin
 const currentUser = JSON.parse(localStorage.getItem('user'));
@@ -69,12 +100,15 @@ async function loadGamesTable() {
 
 function renderGames(data) {
     const tbody = document.getElementById('games-table-body');
-    if (!Array.isArray(data) || data.length === 0) {
+    const state = paginationState.games;
+    const paged = paginateArray(data, state.page, state.perPage);
+    if (!Array.isArray(paged) || paged.length === 0) {
         tbody.innerHTML = '<tr><td colspan="5" class="table-loading">Game tidak ditemukan.</td></tr>';
+        renderPagination('games-pagination', data.length, state.perPage, state.page, (p) => { paginationState.games.page = p; renderGames(allGames); });
         return;
     }
 
-    tbody.innerHTML = data.map(g => {
+    tbody.innerHTML = paged.map(g => {
         const rawCover = g.cover_url || g.cover_image || g.cover;
         const cover = formatImageUrl(rawCover) || 'https://placehold.co/60x60/1e293b/818cf8?text=Game';
 
@@ -96,6 +130,8 @@ function renderGames(data) {
         `;
     }).join('');
 
+    renderPagination('games-pagination', data.length, state.perPage, state.page, (p) => { paginationState.games.page = p; renderGames(allGames); });
+
     if (window.lucide) lucide.createIcons();
 }
 
@@ -113,12 +149,15 @@ async function loadUsersTable() {
 
 function renderUsers(data) {
     const tbody = document.getElementById('users-table-body');
-    if (!Array.isArray(data) || data.length === 0) {
+    const state = paginationState.users;
+    const paged = paginateArray(data, state.page, state.perPage);
+    if (!Array.isArray(paged) || paged.length === 0) {
         tbody.innerHTML = '<tr><td colspan="5" class="table-loading">User tidak ditemukan.</td></tr>';
+        renderPagination('users-pagination', data.length, state.perPage, state.page, (p) => { paginationState.users.page = p; renderUsers(allUsers); });
         return;
     }
 
-    tbody.innerHTML = data.map(u => `
+    tbody.innerHTML = paged.map(u => `
         <tr>
             <td>#${u.id}</td>
             <td><b>${u.username}</b></td>
@@ -138,6 +177,8 @@ function renderUsers(data) {
         </tr>
     `).join('');
 
+    renderPagination('users-pagination', data.length, state.perPage, state.page, (p) => { paginationState.users.page = p; renderUsers(allUsers); });
+
     if (window.lucide) lucide.createIcons();
 }
 
@@ -155,12 +196,15 @@ async function loadPostsTable() {
 
 function renderPosts(data) {
     const tbody = document.getElementById('posts-table-body');
-    if (!Array.isArray(data) || data.length === 0) {
+    const state = paginationState.posts;
+    const paged = paginateArray(data, state.page, state.perPage);
+    if (!Array.isArray(paged) || paged.length === 0) {
         tbody.innerHTML = '<tr><td colspan="6" class="table-loading">Postingan tidak ditemukan.</td></tr>';
+        renderPagination('posts-pagination', data.length, state.perPage, state.page, (p) => { paginationState.posts.page = p; renderPosts(allPosts); });
         return;
     }
 
-    tbody.innerHTML = data.map(p => {
+    tbody.innerHTML = paged.map(p => {
         const shortContent = p.content.length > 40 ? p.content.substring(0, 40) + '...' : p.content;
         return `
             <tr>
@@ -178,6 +222,8 @@ function renderPosts(data) {
         `;
     }).join('');
 
+    renderPagination('posts-pagination', data.length, state.perPage, state.page, (p) => { paginationState.posts.page = p; renderPosts(allPosts); });
+
     if (window.lucide) lucide.createIcons();
 }
 
@@ -193,12 +239,26 @@ async function loadReportsTable() {
             return;
         }
 
-        tbody.innerHTML = items.map(r => `
+        const state = paginationState.reports;
+        const paged = paginateArray(items, state.page, state.perPage);
+        if (!Array.isArray(paged) || paged.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" class="table-loading">Belum ada laporan masuk.</td></tr>';
+            renderPagination('reports-pagination', items.length, state.perPage, state.page, (p) => { paginationState.reports.page = p; loadReportsTable(); });
+            return;
+        }
+
+        tbody.innerHTML = paged.map(r => {
+            const shortContent = r.post_content ? (r.post_content.length > 60 ? r.post_content.substring(0, 60) + '...' : r.post_content) : '-';
+            return `
             <tr>
                 <td>#${r.id}</td>
                 <td><b>${r.reporter_name}</b></td>
                 <td><b>${r.poster_name}</b></td>
                 <td>${r.reason}${r.description ? `<br><small style="color:#94a3b8;">${r.description}</small>` : ''}</td>
+                <td style="max-width: 200px;">
+                    <div style="font-size: 12px; color: #cbd5e1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${r.post_content || '-'}">${shortContent}</div>
+                    <button onclick="viewReportPost(${r.post_id})" style="margin-top: 4px; padding: 4px 8px; font-size: 11px; background: rgba(129, 140, 248, 0.15); color: #818cf8; border: 1px solid rgba(129, 140, 248, 0.3); border-radius: 4px; cursor: pointer;">Lihat Detail</button>
+                </td>
                 <td>
                     <span style="background: ${r.status === 'resolved' ? 'rgba(16, 185, 129, 0.15)' : r.status === 'dismissed' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(245, 158, 11, 0.15)'}; 
                         color: ${r.status === 'resolved' ? '#34d399' : r.status === 'dismissed' ? '#f87171' : '#fbbf24'}; 
@@ -215,7 +275,10 @@ async function loadReportsTable() {
                     </button>
                 </td>
             </tr>
-        `).join('');
+        `;
+        }).join('');
+
+        renderPagination('reports-pagination', items.length, state.perPage, state.page, (p) => { paginationState.reports.page = p; loadReportsTable(); });
     } catch (err) {
         tbody.innerHTML = '<tr><td colspan="6" class="table-loading" style="color:#ef4444;">Gagal memuat laporan.</td></tr>';
     }
@@ -266,6 +329,45 @@ window.dismissReport = async function(id) {
     } catch (err) { showMessage('Gagal dismiss laporan.'); }
 };
 
+// View detail postingan yang dilaporkan
+window.viewReportPost = async function(postId) {
+    try {
+        const res = await fetch(`${API_URL}/api/posts`);
+        if (!res.ok) return;
+        const posts = await res.json();
+        const post = posts.find(p => p.id === postId);
+        if (!post) {
+            showMessage('Postingan tidak ditemukan.');
+            return;
+        }
+
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.style.display = 'flex';
+        modal.innerHTML = `
+            <div class="modal-box" style="background:#1a2e3a;border-radius:12px;padding:24px;width:90%;max-width:500px;color:#fff;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                    <h3 style="margin:0;font-size:18px;">Detail Postingan #${post.id}</h3>
+                    <button onclick="this.closest('.modal-overlay').remove()" style="background:none;border:none;color:#94a3b8;font-size:24px;cursor:pointer;">&times;</button>
+                </div>
+                <div style="margin-bottom:12px;">
+                    <div style="font-size:12px;color:#818cf8;">@${post.username || 'user'} • ${post.game_title || 'Game'}</div>
+                    <div style="font-size:16px;font-weight:600;color:#fff;margin-top:6px;">${post.content || '-'}</div>
+                </div>
+                ${post.post_image ? `<img src="${formatImageUrl(post.post_image)}" style="width:100%;border-radius:8px;margin-top:12px;" alt="Post image" onerror="this.style.display='none'">` : ''}
+                <div style="margin-top:16px;font-size:12px;color:#94a3b8;">Likes: ${post.total_likes || 0}</div>
+                <div style="display:flex;justify-content:flex-end;margin-top:16px;">
+                    <button onclick="this.closest('.modal-overlay').remove()" style="padding:8px 16px;background:#ef4444;color:#fff;border:none;border-radius:6px;cursor:pointer;">Tutup</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        if (window.lucide) lucide.createIcons();
+    } catch (err) {
+        showMessage('Gagal memuat detail postingan.');
+    }
+};
+
 // 6. Render Tabel Feedbacks
 async function loadFeedbacksTable() {
     const tbody = document.getElementById('feedbacks-table-body');
@@ -278,7 +380,15 @@ async function loadFeedbacksTable() {
             return;
         }
 
-        tbody.innerHTML = items.map(f => `
+        const state = paginationState.feedbacks;
+        const paged = paginateArray(items, state.page, state.perPage);
+        if (!Array.isArray(paged) || paged.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" class="table-loading">Belum ada feedback / request game masuk.</td></tr>';
+            renderPagination('feedbacks-pagination', items.length, state.perPage, state.page, (p) => { paginationState.feedbacks.page = p; loadFeedbacksTable(); });
+            return;
+        }
+
+        tbody.innerHTML = paged.map(f => `
             <tr>
                 <td>#${f.id}</td>
                 <td><b>${f.username}</b></td>
@@ -289,6 +399,8 @@ async function loadFeedbacksTable() {
                 </td>
             </tr>
         `).join('');
+
+        renderPagination('feedbacks-pagination', items.length, state.perPage, state.page, (p) => { paginationState.feedbacks.page = p; loadFeedbacksTable(); });
     } catch (err) {
         tbody.innerHTML = '<tr><td colspan="5" class="table-loading" style="color:#ef4444;">Gagal memuat feedback.</td></tr>';
     }

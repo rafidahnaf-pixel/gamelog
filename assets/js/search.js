@@ -2,6 +2,7 @@ lucide.createIcons();
 
 const API_URL = window.location.port === '3000' ? '' : (window.location.origin.includes('localhost') ? 'http://localhost:3000' : window.location.origin);
 let allPosts = [];
+let allUsers = [];
 let selectedStatus = 'ALL';
 let userLikes = [];
 let activePostId = null;
@@ -82,7 +83,21 @@ async function loadSearchData() {
     }
 }
 
-// 4. Filter & Render
+// 3.5 Load Data Users
+async function loadSearchUsers() {
+    try {
+        const res = await fetch(`${API_URL}/api/users`);
+        if (res.ok) {
+            allUsers = await res.json();
+            filterAndRenderUsers();
+        }
+    } catch (err) {
+        console.error('Error load users:', err);
+        document.getElementById('search-users-container').innerHTML = '<p style="color: #ef4444; text-align: center; grid-column: 1/-1;">Gagal memuat pengguna.</p>';
+    }
+}
+
+// 4. Filter & Render Posts
 function filterAndRenderPosts() {
     const searchInput = document.getElementById('main-search-input');
     const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
@@ -193,6 +208,62 @@ function renderSearchResults(posts) {
     });
 
     if (window.lucide) lucide.createIcons();
+}
+
+// 4.5 Filter & Render Users
+function filterAndRenderUsers() {
+    const searchInput = document.getElementById('main-search-input');
+    const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    const countEl = document.getElementById('user-results-count');
+
+    let filtered = allUsers.filter(u => 
+        u.username.toLowerCase().includes(query) ||
+        (u.name && u.name.toLowerCase().includes(query)) ||
+        (u.role && u.role.toLowerCase().includes(query))
+    );
+
+    if (countEl) {
+        countEl.textContent = `${filtered.length} pengguna`;
+    }
+
+    renderSearchUsers(filtered);
+}
+
+function renderSearchUsers(users) {
+    const container = document.getElementById('search-users-container');
+    container.innerHTML = '';
+
+    if (!users || users.length === 0) {
+        container.innerHTML = `<p style="text-align: center; color: #94a3b8; padding: 30px; grid-column: 1/-1;">Tidak ditemukan pengguna yang cocok.</p>`;
+        return;
+    }
+
+    const currentUserId = user ? user.id : null;
+
+    users.forEach(u => {
+        const isSelf = u.id === currentUserId;
+        const avatarSrc = u.avatar 
+            ? (u.avatar.startsWith('http') ? u.avatar : `${API_URL}${u.avatar}`)
+            : null;
+
+        container.innerHTML += `
+            <div style="background: #1e293b; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px; display: flex; align-items: center; gap: 12px;">
+                <div style="width: 48px; height: 48px; border-radius: 50%; background: #312e81; color: #818cf8; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; flex-shrink: 0;">
+                    ${(u.username || 'U').charAt(0).toUpperCase()}
+                </div>
+                <div style="flex: 1;">
+                    <div style="font-size: 15px; font-weight: 600; color: #fff;">${u.name || u.username || 'User'}</div>
+                    <div style="font-size: 12px; color: #818cf8;">@${u.username || 'user'}</div>
+                    <div style="font-size: 11px; color: #94a3b8; margin-top: 4px;">${u.role || 'user'}</div>
+                </div>
+                <div style="margin-left: auto;">
+                    <a href="profile.html?id=${u.id}" style="padding: 8px 14px; background: rgba(129, 140, 248, 0.15); color: #818cf8; border-radius: 8px; text-decoration: none; font-size: 13px; font-weight: 500; border: 1px solid rgba(129, 140, 248, 0.3);">
+                        Lihat Profile
+                    </a>
+                </div>
+            </div>
+        `;
+    });
 }
 
 // 5. Logika Interaksi (Like, Komentar, Share)
@@ -307,10 +378,14 @@ function fallbackCopy(text) {
 document.addEventListener('DOMContentLoaded', () => {
     checkAdminStatus();
     loadSearchData();
+    loadSearchUsers();
 
     const searchInput = document.getElementById('main-search-input');
     if (searchInput) {
-        searchInput.addEventListener('input', filterAndRenderPosts);
+        searchInput.addEventListener('input', () => {
+            filterAndRenderPosts();
+            filterAndRenderUsers();
+        });
     }
 
     const chips = document.querySelectorAll('.filter-chip');

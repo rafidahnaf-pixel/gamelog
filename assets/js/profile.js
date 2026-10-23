@@ -155,33 +155,33 @@ async function loadUserPosts(userId) {
             
             // Avatar user
             const userAvatar = p.user_avatar 
-                ? `<img src="${API_URL}${p.user_avatar}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;" alt="${p.username}">`
-                : `<div style="width:36px;height:36px;border-radius:50%;background:#2563eb;display:flex;align-items:center;justify-content:center;font-weight:600;color:#fff;font-size:14px;">${(p.username || 'U').charAt(0).toUpperCase()}</div>`;
+                ? `<img src="${API_URL}${p.user_avatar}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;" alt="${p.username}">`
+                : `<div style="width:32px;height:32px;border-radius:50%;background:#2563eb;display:flex;align-items:center;justify-content:center;font-weight:600;color:#fff;font-size:13px;">${(p.username || 'U').charAt(0).toUpperCase()}</div>`;
 
             return `
-                <div class="post-card" style="background:#1e293b;border:1px solid #293548;border-radius:12px;overflow:hidden;">
-                    <div class="post-header" style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;">
-                        <div class="post-user-info" style="display:flex;align-items:center;gap:12px;cursor:pointer;" onclick="window.location.href='profile.html?id=${p.user_id}'">
+                <div class="post-card" style="background:#1e293b;border:1px solid #293548;border-radius:10px;overflow:hidden;margin-bottom:14px;">
+                    <div class="post-header" style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;">
+                        <div class="post-user-info" style="display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="window.location.href='profile.html?id=${p.user_id}'">
                             ${userAvatar}
                             <div>
-                                <div style="font-size:14px;font-weight:600;">${p.name || p.username || 'User'}</div>
-                                <div style="font-size:11px;color:#818cf8;">@${p.username || 'user'}</div>
-                                <div style="font-size:11px;color:#94a3b8;">${formatRelativeTime(p.created_at)}</div>
+                                <div style="font-size:13px;font-weight:600;">${p.name || p.username || 'User'}</div>
+                                <div style="font-size:10px;color:#818cf8;">@${p.username || 'user'}</div>
+                                <div style="font-size:10px;color:#94a3b8;">${formatRelativeTime(p.created_at)}</div>
                             </div>
                         </div>
-                        <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.05);padding:4px 12px;border-radius:20px;">
-                            <img src="${gameCover}" style="width:20px;height:20px;border-radius:4px;object-fit:cover;" alt="${p.game_title}">
-                            <span style="font-size:12px;color:#94a3b8;">${p.game_title || 'Game'}</span>
+                        <div style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.05);padding:3px 10px;border-radius:20px;">
+                            <img src="${gameCover}" style="width:16px;height:16px;border-radius:4px;object-fit:cover;" alt="${p.game_title}">
+                            <span style="font-size:11px;color:#94a3b8;">${p.game_title || 'Game'}</span>
                         </div>
                     </div>
                     ${postImage}
-                    <div style="padding:16px;">
-                        <span style="display:inline-block;font-size:11px;font-weight:600;padding:3px 8px;border-radius:4px;margin-bottom:8px;text-transform:uppercase;" class="${statusClass}">${p.status || 'Playing'}</span>
-                        <p style="font-size:14px;color:#cbd5e1;line-height:1.5;margin-top:6px;">${p.content}</p>
+                    <div style="padding:12px 14px;">
+                        <span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 6px;border-radius:4px;margin-bottom:6px;text-transform:uppercase;" class="${statusClass}">${p.status || 'Playing'}</span>
+                        <p style="font-size:13px;color:#cbd5e1;line-height:1.4;margin-top:4px;">${p.content}</p>
                     </div>
-                    <div style="padding:12px 16px;border-top:1px solid rgba(255,255,255,0.05);display:flex;gap:8px;">
-                        <span style="color:#94a3b8;font-size:13px;display:inline-flex;align-items:center;gap:4px;">
-                            <i data-lucide="heart" style="width:14px;height:14px;"></i> ${p.total_likes || 0} Likes
+                    <div style="padding:10px 14px;border-top:1px solid rgba(255,255,255,0.05);display:flex;gap:8px;">
+                        <span style="color:#94a3b8;font-size:12px;display:inline-flex;align-items:center;gap:4px;">
+                            <i data-lucide="heart" style="width:13px;height:13px;"></i> ${p.total_likes || 0} Likes
                         </span>
                     </div>
                 </div>
