@@ -151,11 +151,17 @@ async function loadUserPosts(userId) {
         container.innerHTML = posts.map(p => {
             const gameCover = p.game_cover ? `${API_URL}${p.game_cover}` : 'https://placehold.co/150x150/1e293b/818cf8?text=Game';
             const statusClass = `status-${(p.status || 'playing').toLowerCase().replace(/\s+/g, '-')}`;
-            const postImage = p.post_image ? `<img src="${API_URL}${p.post_image}" style="width:100%;height:200px;object-fit:cover;border-radius:6px;">` : '';
+            const postImageSrc = p.post_image 
+                ? (p.post_image.startsWith('http://') || p.post_image.startsWith('https://') ? p.post_image : `${API_URL}${p.post_image}`)
+                : null;
+            const postImage = postImageSrc ? `<img src="${postImageSrc}" style="width:100%;height:200px;object-fit:cover;border-radius:6px;">` : '';
             
             // Avatar user
-            const userAvatar = p.user_avatar 
-                ? `<img src="${API_URL}${p.user_avatar}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;" alt="${p.username}">`
+            const userAvatarSrc = p.user_avatar 
+                ? (p.user_avatar.startsWith('http://') || p.user_avatar.startsWith('https://') ? p.user_avatar : `${API_URL}${p.user_avatar}`)
+                : null;
+            const userAvatar = userAvatarSrc 
+                ? `<img src="${userAvatarSrc}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;" alt="${p.username}">`
                 : `<div style="width:32px;height:32px;border-radius:50%;background:#2563eb;display:flex;align-items:center;justify-content:center;font-weight:600;color:#fff;font-size:13px;">${(p.username || 'U').charAt(0).toUpperCase()}</div>`;
 
             return `
