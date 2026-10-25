@@ -16,18 +16,18 @@ async function apiFetch(url, options = {}, retries = 3) {
 // Get user from localStorage
 let currentUser = JSON.parse(localStorage.getItem('user'));
 
+// Jika belum login, redirect ke login.html
+if (!currentUser || !currentUser.id) {
+    window.location.href = 'login.html';
+}
+
 // Cek apakah ada parameter ?id= di URL (lihat profile user lain)
 const urlParams = new URLSearchParams(window.location.search);
 const profileUserId = urlParams.get('id');
 const isOwnProfile = !profileUserId || parseInt(profileUserId) === currentUser?.id;
 const targetUserId = isOwnProfile ? currentUser.id : parseInt(profileUserId);
 
-if (!currentUser || !currentUser.id) {
-    document.querySelector('.profile-container').innerHTML = 
-        '<p style="text-align:center;color:#94a3b8;padding:50px;">Silakan login untuk melihat profile.</p>';
-} else {
-    initProfile();
-}
+initProfile();
 
 async function initProfile() {
     try {

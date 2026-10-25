@@ -333,13 +333,26 @@ window.dismissReport = async function(id) {
 window.viewReportPost = async function(postId) {
     try {
         const res = await fetch(`${API_URL}/api/posts`);
-        if (!res.ok) return;
-        const posts = await res.json();
-        const post = posts.find(p => p.id === postId);
-        if (!post) {
-            showMessage('Postingan tidak ditemukan.');
+        if (!res.ok) {
+            showMessage('Gagal memuat daftar postingan.');
             return;
         }
+        const posts = await res.json();
+        
+        // Cari post dengan id yang cocok (coba kedua kemungkinan tipe data)
+        let post = posts.find(p => p.id === postId);
+        if (!post) {
+            post = posts.find(p => p.id == postId); // loose comparison
+        }
+        
+        if (!post) {
+            showMessage('Postingan tidak ditemukan (ID: ' + postId + ').');
+            return;
+        }
+
+        const postImageSrc = post.post_image 
+            ? (post.post_image.startsWith('http://') || post.post_image.startsWith('https://') ? post.post_image : `${API_URL}${post.post_image}`)
+            : null;
 
         const modal = document.createElement('div');
         modal.className = 'modal-overlay';
@@ -354,7 +367,7 @@ window.viewReportPost = async function(postId) {
                     <div style="font-size:12px;color:#818cf8;">@${post.username || 'user'} • ${post.game_title || 'Game'}</div>
                     <div style="font-size:16px;font-weight:600;color:#fff;margin-top:6px;">${post.content || '-'}</div>
                 </div>
-                ${post.post_image ? `<img src="${formatImageUrl(post.post_image)}" style="width:100%;border-radius:8px;margin-top:12px;" alt="Post image" onerror="this.style.display='none'">` : ''}
+                ${postImageSrc ? `<img src="${postImageSrc}" style="width:100%;border-radius:8px;margin-top:12px;" alt="Post image" onerror="this.style.display='none'">` : ''}
                 <div style="margin-top:16px;font-size:12px;color:#94a3b8;">Likes: ${post.total_likes || 0}</div>
                 <div style="display:flex;justify-content:flex-end;margin-top:16px;">
                     <button onclick="this.closest('.modal-overlay').remove()" style="padding:8px 16px;background:#ef4444;color:#fff;border:none;border-radius:6px;cursor:pointer;">Tutup</button>
@@ -364,6 +377,7 @@ window.viewReportPost = async function(postId) {
         document.body.appendChild(modal);
         if (window.lucide) lucide.createIcons();
     } catch (err) {
+        console.error('Error viewReportPost:', err);
         showMessage('Gagal memuat detail postingan.');
     }
 };
