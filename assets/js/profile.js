@@ -151,7 +151,7 @@ async function loadUserPosts(userId) {
         container.innerHTML = posts.map(p => {
             const gameCover = p.game_cover ? `${API_URL}${p.game_cover}` : 'https://placehold.co/150x150/1e293b/818cf8?text=Game';
             const statusClass = `status-${(p.status || 'playing').toLowerCase().replace(/\s+/g, '-')}`;
-            const postImage = p.post_image ? `<img src="${API_URL}${p.post_image}" style="width:100%;max-height:200px;object-fit:cover;border-radius:8px;margin-top:10px;">` : '';
+            const postImage = p.post_image ? `<img src="${API_URL}${p.post_image}" style="width:100%;height:200px;object-fit:cover;border-radius:6px;">` : '';
             
             // Avatar user
             const userAvatar = p.user_avatar 
@@ -159,29 +159,19 @@ async function loadUserPosts(userId) {
                 : `<div style="width:32px;height:32px;border-radius:50%;background:#2563eb;display:flex;align-items:center;justify-content:center;font-weight:600;color:#fff;font-size:13px;">${(p.username || 'U').charAt(0).toUpperCase()}</div>`;
 
             return `
-                <div class="post-card" style="background:#1e293b;border:1px solid #293548;border-radius:10px;overflow:hidden;margin-bottom:14px;">
-                    <div class="post-header" style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;">
-                        <div class="post-user-info" style="display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="window.location.href='profile.html?id=${p.user_id}'">
-                            ${userAvatar}
-                            <div>
-                                <div style="font-size:13px;font-weight:600;">${p.name || p.username || 'User'}</div>
-                                <div style="font-size:10px;color:#818cf8;">@${p.username || 'user'}</div>
-                                <div style="font-size:10px;color:#94a3b8;">${formatRelativeTime(p.created_at)}</div>
-                            </div>
-                        </div>
-                        <div style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.05);padding:3px 10px;border-radius:20px;">
-                            <img src="${gameCover}" style="width:16px;height:16px;border-radius:4px;object-fit:cover;" alt="${p.game_title}">
-                            <span style="font-size:11px;color:#94a3b8;">${p.game_title || 'Game'}</span>
-                        </div>
+                <div class="post-card" style="background:#1e293b;border:1px solid #293548;border-radius:10px;overflow:hidden;display:flex;flex-direction:column;">
+                    <div style="padding:8px;display:flex;justify-content:space-between;align-items:flex-start;">
+                        <div style="font-size:11px;font-weight:600;color:#fff;">${p.game_title || 'Game'}</div>
+                        <div style="font-size:10px;color:#94a3b8;">${formatRelativeTime(p.created_at)}</div>
                     </div>
                     ${postImage}
-                    <div style="padding:12px 14px;">
-                        <span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 6px;border-radius:4px;margin-bottom:6px;text-transform:uppercase;" class="${statusClass}">${p.status || 'Playing'}</span>
-                        <p style="font-size:13px;color:#cbd5e1;line-height:1.4;margin-top:4px;">${p.content}</p>
+                    <div style="padding:8px;">
+                        <span style="display:inline-block;font-size:10px;font-weight:600;padding:2px 6px;border-radius:4px;text-transform:uppercase;" class="${statusClass}">${p.status || 'Playing'}</span>
+                        <p style="font-size:12px;color:#cbd5e1;line-height:1.3;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${p.content}</p>
                     </div>
-                    <div style="padding:10px 14px;border-top:1px solid rgba(255,255,255,0.05);display:flex;gap:8px;">
-                        <span style="color:#94a3b8;font-size:12px;display:inline-flex;align-items:center;gap:4px;">
-                            <i data-lucide="heart" style="width:13px;height:13px;"></i> ${p.total_likes || 0} Likes
+                    <div style="padding:6px 8px;border-top:1px solid rgba(255,255,255,0.05);display:flex;justify-content:space-between;align-items:center;">
+                        <span style="color:#94a3b8;font-size:11px;display:inline-flex;align-items:center;gap:4px;">
+                            <i data-lucide="heart" style="width:12px;height:12px;"></i> ${p.total_likes || 0}
                         </span>
                     </div>
                 </div>
