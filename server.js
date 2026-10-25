@@ -364,16 +364,21 @@ app.post('/api/posts', upload.single('image'), (req, res) => {
     db.query(insertQuery, [user_id, game_id, content, status || 'Playing', post_image], (err, result) => {
         if (err) return res.status(500).json({ error: err.message });
 
-        // Kirim notifikasi ke semua follower yang user ini posting
-        const followersQuery = 'SELECT follower_id FROM follows WHERE following_id = ?';
-        db.query(followersQuery, [user_id], (err, followers) => {
-            if (!err && followers.length > 0) {
-                followers.forEach(f => {
-                    const notifMsg = `${user.username || 'User'} membuat postingan baru`;
-                    db.query('INSERT INTO notifications (user_id, type, message, related_id) VALUES (?, ?, ?, ?)',
-                        [f.follower_id, 'new_post', notifMsg, result.insertId]);
-                });
-            }
+        // Ambil username pemilik postingan untuk notifikasi
+        db.query('SELECT username FROM users WHERE id = ?', [user_id], (err, userResults) => {
+            const username = (!err && userResults.length > 0) ? userResults[0].username : 'User';
+            
+            // Kirim notifikasi ke semua follower yang user ini posting
+            const followersQuery = 'SELECT follower_id FROM follows WHERE following_id = ?';
+            db.query(followersQuery, [user_id], (err, followers) => {
+                if (!err && followers.length > 0) {
+                    followers.forEach(f => {
+                        const notifMsg = `${username} membuat postingan baru`;
+                        db.query('INSERT INTO notifications (user_id, type, message, related_id) VALUES (?, ?, ?, ?)',
+                            [f.follower_id, 'new_post', notifMsg, result.insertId]);
+                    });
+                }
+            });
         });
 
         res.status(201).json({
