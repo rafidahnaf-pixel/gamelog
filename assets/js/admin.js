@@ -331,18 +331,27 @@ window.dismissReport = async function(id) {
 
 // View detail postingan yang dilaporkan
 window.viewReportPost = async function(postId) {
+    console.log('viewReportPost called with postId:', postId, typeof postId);
     try {
         const res = await fetch(`${API_URL}/api/posts`);
+        console.log('fetch posts status:', res.status);
         if (!res.ok) {
             showMessage('Gagal memuat daftar postingan.');
             return;
         }
         const posts = await res.json();
+        console.log('total posts:', posts.length);
+        console.log('sample post IDs:', posts.slice(0, 5).map(p => p.id));
         
-        // Cari post dengan id yang cocok (coba kedua kemungkinan tipe data)
+        // Cari post dengan id yang cocok
         let post = posts.find(p => p.id === postId);
         if (!post) {
             post = posts.find(p => p.id == postId); // loose comparison
+        }
+        if (!post) {
+            // Coba cari dengan parseInt
+            const numericId = parseInt(postId);
+            post = posts.find(p => parseInt(p.id) === numericId);
         }
         
         if (!post) {
@@ -350,12 +359,14 @@ window.viewReportPost = async function(postId) {
             return;
         }
 
+        console.log('found post:', post);
+
         const postImageSrc = post.post_image 
             ? (post.post_image.startsWith('http://') || post.post_image.startsWith('https://') ? post.post_image : `${API_URL}${post.post_image}`)
             : null;
 
         const modal = document.createElement('div');
-        modal.className = 'modal-overlay';
+        modal.className = 'modal-overlay active';
         modal.style.display = 'flex';
         modal.innerHTML = `
             <div class="modal-box" style="background:#1a2e3a;border-radius:12px;padding:24px;width:90%;max-width:500px;color:#fff;">
